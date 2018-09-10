@@ -46,7 +46,7 @@
     
     <title>
         
-            HTTPS 原理解析 | 
+            改善接口(Api)设计 - Java 8 默认方法（Default Method） | 
         
         AQHI
     </title>
@@ -57,7 +57,7 @@
 
     <meta name="format-detection" content="telephone=no"/>
     <meta name="description" itemprop="description" content="Talk is cheap , show me the code.">
-    <meta name="keywords" content="艾琴海,HTTPS,HTTP">
+    <meta name="keywords" content="艾琴海,源码解析">
     <meta name="theme-color" content="#0097A7">
 
     <!-- Disable Fucking Bloody Baidu Tranformation -->
@@ -218,7 +218,7 @@
     <!-- WebAPP Icons -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="AQHI">
-    <meta name="msapplication-starturl" content="http://yoursite.com/2016/07/13/HTTPS 原理解析/">
+    <meta name="msapplication-starturl" content="http://yoursite.com/2018/09/07/java8_default_method/">
     <meta name="msapplication-navbutton-color" content="#0097A7">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="AQHI">
@@ -233,16 +233,16 @@
     
 
     <!-- The Open Graph protocol -->
-    <meta property="og:url" content="http://yoursite.com/2016/07/13/HTTPS 原理解析/">
+    <meta property="og:url" content="http://yoursite.com/2018/09/07/java8_default_method/">
     <meta property="og:type" content="blog">
-    <meta property="og:title" content="HTTPS 原理解析 | AQHI">
+    <meta property="og:title" content="改善接口(Api)设计 - Java 8 默认方法（Default Method） | AQHI">
     <meta property="og:image" content="/img/favicon.png">
     <meta property="og:description" content="Talk is cheap , show me the code.">
-    <meta property="og:article:tag" content="HTTPS"> <meta property="og:article:tag" content="HTTP"> 
+    <meta property="og:article:tag" content="源码解析"> 
 
     
-        <meta property="article:published_time" content="Wed Jul 13 2016 20:46:25 GMT+0800">
-        <meta property="article:modified_time" content="Fri Sep 07 2018 16:10:35 GMT+0800">
+        <meta property="article:published_time" content="Fri Sep 07 2018 11:10:10 GMT+0800">
+        <meta property="article:modified_time" content="Mon Sep 10 2018 16:17:19 GMT+0800">
     
 
     <!-- The Twitter Card protocol -->
@@ -250,7 +250,7 @@
 
     <!-- Add canonical link for SEO -->
     
-        <link rel="canonical" href="http://yoursite.com/2016/07/13/HTTPS 原理解析/index.html" />
+        <link rel="canonical" href="http://yoursite.com/2018/09/07/java8_default_method/index.html" />
     
 
     <!-- Structured-data for SEO -->
@@ -262,10 +262,10 @@
 {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "mainEntityOfPage": "http://yoursite.com/2016/07/13/HTTPS 原理解析/index.html",
-    "headline": "HTTPS 原理解析",
-    "datePublished": "Wed Jul 13 2016 20:46:25 GMT+0800",
-    "dateModified": "Fri Sep 07 2018 16:10:35 GMT+0800",
+    "mainEntityOfPage": "http://yoursite.com/2018/09/07/java8_default_method/index.html",
+    "headline": "改善接口(Api)设计 - Java 8 默认方法（Default Method）",
+    "datePublished": "Fri Sep 07 2018 11:10:10 GMT+0800",
+    "dateModified": "Mon Sep 10 2018 16:17:19 GMT+0800",
     "author": {
         "@type": "Person",
         "name": "艾琴海",
@@ -283,7 +283,7 @@
             "url": "/img/favicon.png"
         }
     },
-    "keywords": ",HTTPS,HTTP艾琴海",
+    "keywords": ",源码解析艾琴海",
     "description": "Talk is cheap , show me the code.",
 }
 </script>
@@ -349,7 +349,7 @@
     </button>
 
     <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
-        <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#一-前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">一 前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#二-HTTPS-验证原理"><span class="post-toc-number">2.</span> <span class="post-toc-text">二  HTTPS 验证原理</span></a></li></ol>
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Default-Method-改善"><span class="post-toc-number">1.</span> <span class="post-toc-text">Default Method 改善</span></a></li></ol>
     </ul>
     
 
@@ -381,7 +381,7 @@
         
     
             <p class="article-headline-p">
-                HTTPS 原理解析
+                改善接口(Api)设计 - Java 8 默认方法（Default Method）
             </p>
         </div>
 
@@ -400,7 +400,7 @@
     <!-- Author Name & Date -->
     <div>
         <strong>艾琴海</strong>
-        <span>7月 13, 2016</span>
+        <span>9月 07, 2018</span>
     </div>
 
     <div class="section-spacer"></div>
@@ -424,7 +424,7 @@
     </button>
     <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
         <li class="mdl-menu__item">
-        <a class="post_tag-link" href="/tags/HTTP/">HTTP</a></li><li class="mdl-menu__item"><a class="post_tag-link" href="/tags/HTTPS/">HTTPS</a>
+        <a class="post_tag-link" href="/tags/源码解析/">源码解析</a>
     </ul>
     
 
@@ -441,7 +441,7 @@
 
     <!-- Share Weibo -->
     
-        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=HTTPS 原理解析&url=http://yoursite.com/2016/07/13/HTTPS 原理解析/index.html&pic=http://yoursite.com/img/favicon.png&searchPic=false&style=simple" target="_blank">
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=改善接口(Api)设计 - Java 8 默认方法（Default Method）&url=http://yoursite.com/2018/09/07/java8_default_method/index.html&pic=http://yoursite.com/img/favicon.png&searchPic=false&style=simple" target="_blank">
             <li class="mdl-menu__item">
                 分享到微博
             </li>
@@ -450,7 +450,7 @@
 
     <!-- Share Twitter -->
     
-        <a class="post_share-link" href="https://twitter.com/intent/tweet?text=HTTPS 原理解析&url=http://yoursite.com/2016/07/13/HTTPS 原理解析/index.html&via=艾琴海" target="_blank">
+        <a class="post_share-link" href="https://twitter.com/intent/tweet?text=改善接口(Api)设计 - Java 8 默认方法（Default Method）&url=http://yoursite.com/2018/09/07/java8_default_method/index.html&via=艾琴海" target="_blank">
             <li class="mdl-menu__item">
                 分享到 Twitter
             </li>
@@ -459,7 +459,7 @@
 
     <!-- Share Facebook -->
     
-        <a class="post_share-link" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2016/07/13/HTTPS 原理解析/index.html" target="_blank">
+        <a class="post_share-link" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2018/09/07/java8_default_method/index.html" target="_blank">
             <li class="mdl-menu__item">
                 分享到 Facebook
             </li>
@@ -468,7 +468,7 @@
 
     <!-- Share Google+ -->
     
-        <a class="post_share-link" href="https://plus.google.com/share?url=http://yoursite.com/2016/07/13/HTTPS 原理解析/index.html" target="_blank">
+        <a class="post_share-link" href="https://plus.google.com/share?url=http://yoursite.com/2018/09/07/java8_default_method/index.html" target="_blank">
             <li class="mdl-menu__item">
                 分享到 Google+
             </li>
@@ -493,9 +493,35 @@
                 <!-- Post Content -->
                 <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
     
-        <p>HTTPS（全称：Hyper Text Transfer Protocol over Secure Socket Layer），是以安全为目标的HTTP通道，简单讲是HTTP的安全版。</p>
-<h2 id="一-前言"><a href="#一-前言" class="headerlink" title="一 前言"></a>一 前言</h2><p>在说HTTPS之前先说说什么是HTTP，HTTP就是我们平时浏览网页时候使用的一种协议。<br>HTTP协议传输的数据都是未加密的，也就是明文的，因此使用HTTP协议传输隐私信息非常不安全。<br>为了保证这些隐私数据能加密传输，于是网景公司设计了SSL（Secure Sockets Layer）协议用于<br>对HTTP协议传输的数据进行加密，从而就诞生了HTTPS。SSL目前的版本是3.0，被IETF（Internet Engineering<br> Task Force）定义在RFC 6101中，之后IETF对SSL 3.0进行了升级，于是出现了TLS（Transport Layer Security）<br> 1.0，定义在RFC 2246。实际上我们现在的HTTPS都是用的TLS协议，但是由于SSL出现的时间比较早，并且依旧被现在浏览器<br> 所支持，因此SSL依然是HTTPS的代名词，但无论是TLS还是SSL都是上个世纪的事情，SSL最后一个版本是3.0，今后TLS将会继承<br> SSL优良血统继续为我们进行加密服务。目前TLS的版本是1.2，定义在RFC 5246中，暂时还没有被广泛的使用 ()</p>
-<h2 id="二-HTTPS-验证原理"><a href="#二-HTTPS-验证原理" class="headerlink" title="二  HTTPS 验证原理"></a>二  HTTPS 验证原理</h2><p>Https在真正请求数据前，先会与服务有几次握手验证，以证明相互的身份，以下图为例<br><img src="http://ormdifxfs.bkt.clouddn.com/https.png" alt="https"></p>
+        <p>简介：本文通过对JDK中对默认方法(<em>default method</em>)的应用，浅析默认方法的作用以及对我们接口设计的一些启发。</p>
+<blockquote>
+<p><em>Default methods enable new functionality to be added to the interfaces of libraries and ensure binary compatibility with code written for older versions of those interfaces.</em></p>
+</blockquote>
+<blockquote>
+<p><em>默认方法允许您添加新的功能到现有库的接口中，并能确保与采用旧版本接口编写的代码的二进制兼容性。</em></p>
+</blockquote>
+<p>####什么是默认方法</p>
+<ul>
+<li><p>接口本身只能进行方法的定义，默认方法就是接口方法的“默认实现”。接口方法前加上关键字<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">#### 为什么要有默认方法</span><br><span class="line">在 Java 8 之前，接口与其实现类之间的*耦合度太高*（tightly coupled），当需要为一个接口添加方法时，所有的实现类都必须随之修改。默认方法解决了这个问题，它可以为接口添加新的方法，而不会破坏已有的接口的实现。这在 lambda 表达式作为 Java 8 语言的重要特性而出现之际，为升级旧接口且保持向后兼容*（backward compatibility）提供了途径。同时，默认方法的加入，也能改变传统Java接口的设计思想(Java 被人诟病的```Interface -&gt; Abstract -&gt; Class```模式)，简化接口设计。</span><br><span class="line"></span><br><span class="line">Java 8中```Iterable```接口中的```forEach ```方法:</span><br></pre></td></tr></table></figure></p>
+<p>default void forEach(Consumer&lt;? super T&gt; var1) {</p>
+<pre><code>Objects.requireNonNull(var1);
+Iterator var2 = this.iterator();
+
+while(var2.hasNext()) {
+    Object var3 = var2.next();
+    var1.accept(var3);
+}
+</code></pre><p>  }</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### Java传统接口设计模式</span><br><span class="line"></span><br><span class="line">Java 8之前，接口只能作为声明但不能提供任何实现。因此，为了添加一些实现，我们都需要一个Abstract类，如下图：</span><br><span class="line"></span><br><span class="line">![](http://cdn.aqhi.net/java8default2.png)</span><br><span class="line"></span><br><span class="line">+ 接口层定义相关方法</span><br><span class="line">+ ```Abstract```类实现公共方法</span><br><span class="line">+ 如果子类需要自己需要自己的行为则直接重写(```Override```)即可。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#### 问题产生</span><br><span class="line">在大部分的情况下，这种设计都是没有问题的，但是还是比较繁琐，下面是 Java Collections API List部分的继承关系：</span><br><span class="line">![](http://cdn.aqhi.net/java8default1.png)</span><br><span class="line"></span><br><span class="line">我们以List接口中的```sort（）```方法来分析。只有类，即AbstractList和MyList才能实际实现此方法，而具体实现是完全一致的，这就需要我们复制代码了。有人说，为什么不直接继承AbstractList，我们都知道Java中是不允许多继承的，有些情况会让你不得不这么做。</span><br><span class="line"></span><br><span class="line">Java API的设计者非常清楚这个问题，因此将```sort()```方法移到了一个只有静态方法的无关类中，没错，就是```Collections```，这样虽然解决了问题，但是却偏离的Java面向对象的思想。</span><br><span class="line"></span><br><span class="line">Java 7中```Collections.sort(List&lt;T&gt; list)```方法实现如下：</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">  public static &lt;T extends Comparable&lt;? super T&gt;&gt; void sort(List&lt;T&gt; list) &#123;</span><br><span class="line">        Object[] a = list.toArray();</span><br><span class="line">        Arrays.sort(a);</span><br><span class="line">        ListIterator&lt;T&gt; i = list.listIterator();</span><br><span class="line">        for (int j=0; j&lt;a.length; j++) &#123;</span><br><span class="line">            i.next();</span><br><span class="line">            i.set((T)a[j]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="Default-Method-改善"><a href="#Default-Method-改善" class="headerlink" title="Default Method 改善"></a>Default Method 改善</h4><p>Java8 引入Default Method后，很大程度上可以减少Abstract类的数量，也能更好的实现“面向对象”，毕竟排序应当属于<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Java 8中```Collections```将```sort()```方法还给```List```。</span><br><span class="line">```Collections.sort(List&lt;T&gt; list)```方法实现如下：</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">    @SuppressWarnings(&quot;unchecked&quot;)</span><br><span class="line">    public static &lt;T extends Comparable&lt;? super T&gt;&gt; void sort(List&lt;T&gt; list) &#123;</span><br><span class="line">        list.sort(null);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">```java</span><br><span class="line">	@SuppressWarnings(&#123;&quot;unchecked&quot;, &quot;rawtypes&quot;&#125;)</span><br><span class="line">	default void sort(Comparator&lt;? super E&gt; c) &#123;</span><br><span class="line">	    Object[] a = this.toArray();</span><br><span class="line">	    Arrays.sort(a, (Comparator) c);</span><br><span class="line">	    ListIterator&lt;E&gt; i = this.listIterator();</span><br><span class="line">	    for (Object e : a) &#123;</span><br><span class="line">	        i.next();</span><br><span class="line">	        i.set((E) e);</span><br><span class="line">	    &#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>参考资料:</p>
+<ul>
+<li><a href="https://blog.frankel.ch/default-methods-java-8/" target="_blank" rel="noopener">Default methods in Java 8, and what it changes in API design</a></li>
+<li><a href="http://ebnbin.com/2015/12/20/java-8-default-methods" target="_blank" rel="noopener">Java 8 默认方法（Default Methods）</a></li>
+</ul>
 
         
     
@@ -516,19 +542,19 @@
             <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
     <!-- Prev Nav -->
     
-        <a href="/2018/09/06/Linux注册服务/" id="post_nav-newer" class="prev-content">
-            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
-                <i class="material-icons">arrow_back</i>
-            </button>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            新篇
-        </a>
-    
 
     <!-- Section Spacer -->
     <div class="section-spacer"></div>
 
     <!-- Next Nav -->
+    
+        <a href="/2018/09/06/服务器迁移/" id="post_nav-older" class="next-content">
+            旧篇
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_forward</i>
+            </button>
+        </a>
     
 </nav>
 
