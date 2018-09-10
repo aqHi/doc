@@ -57,7 +57,7 @@
 
     <meta name="format-detection" content="telephone=no"/>
     <meta name="description" itemprop="description" content="Talk is cheap , show me the code.">
-    <meta name="keywords" content="艾琴海,源码解析">
+    <meta name="keywords" content="艾琴海,源码解析,Java 8,默认方法,Default Method">
     <meta name="theme-color" content="#0097A7">
 
     <!-- Disable Fucking Bloody Baidu Tranformation -->
@@ -238,11 +238,11 @@
     <meta property="og:title" content="改善接口(Api)设计 - Java 8 默认方法（Default Method） | AQHI">
     <meta property="og:image" content="/img/favicon.png">
     <meta property="og:description" content="Talk is cheap , show me the code.">
-    <meta property="og:article:tag" content="源码解析"> 
+    <meta property="og:article:tag" content="源码解析"> <meta property="og:article:tag" content="Java 8"> <meta property="og:article:tag" content="默认方法"> <meta property="og:article:tag" content="Default Method"> 
 
     
         <meta property="article:published_time" content="Fri Sep 07 2018 11:10:10 GMT+0800">
-        <meta property="article:modified_time" content="Mon Sep 10 2018 16:17:19 GMT+0800">
+        <meta property="article:modified_time" content="Mon Sep 10 2018 16:44:11 GMT+0800">
     
 
     <!-- The Twitter Card protocol -->
@@ -265,7 +265,7 @@
     "mainEntityOfPage": "http://yoursite.com/2018/09/07/java8_default_method/index.html",
     "headline": "改善接口(Api)设计 - Java 8 默认方法（Default Method）",
     "datePublished": "Fri Sep 07 2018 11:10:10 GMT+0800",
-    "dateModified": "Mon Sep 10 2018 16:17:19 GMT+0800",
+    "dateModified": "Mon Sep 10 2018 16:44:11 GMT+0800",
     "author": {
         "@type": "Person",
         "name": "艾琴海",
@@ -283,7 +283,7 @@
             "url": "/img/favicon.png"
         }
     },
-    "keywords": ",源码解析艾琴海",
+    "keywords": ",源码解析,Java 8,默认方法,Default Method艾琴海",
     "description": "Talk is cheap , show me the code.",
 }
 </script>
@@ -349,7 +349,7 @@
     </button>
 
     <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
-        <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Default-Method-改善"><span class="post-toc-number">1.</span> <span class="post-toc-text">Default Method 改善</span></a></li></ol>
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#什么是默认方法"><span class="post-toc-number">1.</span> <span class="post-toc-text">什么是默认方法</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#为什么要有默认方法"><span class="post-toc-number">2.</span> <span class="post-toc-text">为什么要有默认方法</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Java传统接口设计模式"><span class="post-toc-number">3.</span> <span class="post-toc-text">Java传统接口设计模式</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#问题产生"><span class="post-toc-number">4.</span> <span class="post-toc-text">问题产生</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Default-Method-改善"><span class="post-toc-number">5.</span> <span class="post-toc-text">Default Method 改善</span></a></li></ol>
     </ul>
     
 
@@ -424,7 +424,7 @@
     </button>
     <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
         <li class="mdl-menu__item">
-        <a class="post_tag-link" href="/tags/源码解析/">源码解析</a>
+        <a class="post_tag-link" href="/tags/Default-Method/">Default Method</a></li><li class="mdl-menu__item"><a class="post_tag-link" href="/tags/Java-8/">Java 8</a></li><li class="mdl-menu__item"><a class="post_tag-link" href="/tags/源码解析/">源码解析</a></li><li class="mdl-menu__item"><a class="post_tag-link" href="/tags/默认方法/">默认方法</a>
     </ul>
     
 
@@ -493,30 +493,36 @@
                 <!-- Post Content -->
                 <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
     
-        <p>简介：本文通过对JDK中对默认方法(<em>default method</em>)的应用，浅析默认方法的作用以及对我们接口设计的一些启发。</p>
+        <p>简介：本文通过分析对JDK中对默认方法 (<em>default method</em>) 的应用，浅析默认方法的作用，以及对我们接口设计的一些启发。</p>
 <blockquote>
 <p><em>Default methods enable new functionality to be added to the interfaces of libraries and ensure binary compatibility with code written for older versions of those interfaces.</em></p>
 </blockquote>
 <blockquote>
 <p><em>默认方法允许您添加新的功能到现有库的接口中，并能确保与采用旧版本接口编写的代码的二进制兼容性。</em></p>
 </blockquote>
-<p>####什么是默认方法</p>
-<ul>
-<li><p>接口本身只能进行方法的定义，默认方法就是接口方法的“默认实现”。接口方法前加上关键字<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">#### 为什么要有默认方法</span><br><span class="line">在 Java 8 之前，接口与其实现类之间的*耦合度太高*（tightly coupled），当需要为一个接口添加方法时，所有的实现类都必须随之修改。默认方法解决了这个问题，它可以为接口添加新的方法，而不会破坏已有的接口的实现。这在 lambda 表达式作为 Java 8 语言的重要特性而出现之际，为升级旧接口且保持向后兼容*（backward compatibility）提供了途径。同时，默认方法的加入，也能改变传统Java接口的设计思想(Java 被人诟病的```Interface -&gt; Abstract -&gt; Class```模式)，简化接口设计。</span><br><span class="line"></span><br><span class="line">Java 8中```Iterable```接口中的```forEach ```方法:</span><br></pre></td></tr></table></figure></p>
-<p>default void forEach(Consumer&lt;? super T&gt; var1) {</p>
-<pre><code>Objects.requireNonNull(var1);
-Iterator var2 = this.iterator();
-
-while(var2.hasNext()) {
-    Object var3 = var2.next();
-    var1.accept(var3);
-}
-</code></pre><p>  }</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### Java传统接口设计模式</span><br><span class="line"></span><br><span class="line">Java 8之前，接口只能作为声明但不能提供任何实现。因此，为了添加一些实现，我们都需要一个Abstract类，如下图：</span><br><span class="line"></span><br><span class="line">![](http://cdn.aqhi.net/java8default2.png)</span><br><span class="line"></span><br><span class="line">+ 接口层定义相关方法</span><br><span class="line">+ ```Abstract```类实现公共方法</span><br><span class="line">+ 如果子类需要自己需要自己的行为则直接重写(```Override```)即可。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#### 问题产生</span><br><span class="line">在大部分的情况下，这种设计都是没有问题的，但是还是比较繁琐，下面是 Java Collections API List部分的继承关系：</span><br><span class="line">![](http://cdn.aqhi.net/java8default1.png)</span><br><span class="line"></span><br><span class="line">我们以List接口中的```sort（）```方法来分析。只有类，即AbstractList和MyList才能实际实现此方法，而具体实现是完全一致的，这就需要我们复制代码了。有人说，为什么不直接继承AbstractList，我们都知道Java中是不允许多继承的，有些情况会让你不得不这么做。</span><br><span class="line"></span><br><span class="line">Java API的设计者非常清楚这个问题，因此将```sort()```方法移到了一个只有静态方法的无关类中，没错，就是```Collections```，这样虽然解决了问题，但是却偏离的Java面向对象的思想。</span><br><span class="line"></span><br><span class="line">Java 7中```Collections.sort(List&lt;T&gt; list)```方法实现如下：</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">  public static &lt;T extends Comparable&lt;? super T&gt;&gt; void sort(List&lt;T&gt; list) &#123;</span><br><span class="line">        Object[] a = list.toArray();</span><br><span class="line">        Arrays.sort(a);</span><br><span class="line">        ListIterator&lt;T&gt; i = list.listIterator();</span><br><span class="line">        for (int j=0; j&lt;a.length; j++) &#123;</span><br><span class="line">            i.next();</span><br><span class="line">            i.set((T)a[j]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-</li>
+<h4 id="什么是默认方法"><a href="#什么是默认方法" class="headerlink" title="什么是默认方法"></a>什么是默认方法</h4><ul>
+<li>接口本身只能进行方法的定义，默认方法就是接口方法的“默认实现”。接口方法前加上关键字<code>default</code>即可。</li>
 </ul>
-<h4 id="Default-Method-改善"><a href="#Default-Method-改善" class="headerlink" title="Default Method 改善"></a>Default Method 改善</h4><p>Java8 引入Default Method后，很大程度上可以减少Abstract类的数量，也能更好的实现“面向对象”，毕竟排序应当属于<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Java 8中```Collections```将```sort()```方法还给```List```。</span><br><span class="line">```Collections.sort(List&lt;T&gt; list)```方法实现如下：</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">    @SuppressWarnings(&quot;unchecked&quot;)</span><br><span class="line">    public static &lt;T extends Comparable&lt;? super T&gt;&gt; void sort(List&lt;T&gt; list) &#123;</span><br><span class="line">        list.sort(null);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">```java</span><br><span class="line">	@SuppressWarnings(&#123;&quot;unchecked&quot;, &quot;rawtypes&quot;&#125;)</span><br><span class="line">	default void sort(Comparator&lt;? super E&gt; c) &#123;</span><br><span class="line">	    Object[] a = this.toArray();</span><br><span class="line">	    Arrays.sort(a, (Comparator) c);</span><br><span class="line">	    ListIterator&lt;E&gt; i = this.listIterator();</span><br><span class="line">	    for (Object e : a) &#123;</span><br><span class="line">	        i.next();</span><br><span class="line">	        i.set((E) e);</span><br><span class="line">	    &#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="为什么要有默认方法"><a href="#为什么要有默认方法" class="headerlink" title="为什么要有默认方法"></a>为什么要有默认方法</h4><p>在 Java 8 之前，接口与其实现类之间的<em>耦合度太高</em>（tightly coupled），当需要为一个接口添加方法时，所有的实现类都必须随之修改。默认方法解决了这个问题，它可以为接口添加新的方法，而不会破坏已有的接口的实现。这在 <em>lambda</em> 表达式作为 Java 8 语言的重要特性而出现之际，为升级旧接口且保持<em>向后兼容</em>（backward compatibility）提供了途径。同时，默认方法的加入，也能改变传统Java接口的设计思想(Java 被人诟病的 <code>Interface -&gt; Abstract -&gt; Class</code> 模式)，简化接口设计。</p>
+<p>Java 8中 <code>Iterable</code> 接口中的 <code>forEach</code>  方法:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">forEach</span><span class="params">(Consumer&lt;? <span class="keyword">super</span> T&gt; var1)</span> </span>&#123;</span><br><span class="line">       Objects.requireNonNull(var1);</span><br><span class="line">       Iterator var2 = <span class="keyword">this</span>.iterator();</span><br><span class="line"></span><br><span class="line">       <span class="keyword">while</span>(var2.hasNext()) &#123;</span><br><span class="line">           Object var3 = var2.next();</span><br><span class="line">           var1.accept(var3);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Java传统接口设计模式"><a href="#Java传统接口设计模式" class="headerlink" title="Java传统接口设计模式"></a>Java传统接口设计模式</h4><p>Java 8之前，接口只能作为声明但不能提供任何实现。因此，为了添加一些实现，我们都需要一个 <code>Abstract</code> 类，如下图：</p>
+<p><img src="http://cdn.aqhi.net/java8default2.png" alt=""></p>
+<ul>
+<li>接口层定义相关方法</li>
+<li><code>Abstract</code> 类实现公共方法</li>
+<li>如果子类需要自己需要自己的行为则直接重写(<code>Override</code>)即可。</li>
+</ul>
+<h4 id="问题产生"><a href="#问题产生" class="headerlink" title="问题产生"></a>问题产生</h4><p>在大部分的情况下，这种设计都是没有问题的，但是还是比较繁琐，下面是 Java Collections API List部分的继承关系：<br><img src="http://cdn.aqhi.net/java8default1.png" alt=""></p>
+<p>我们以 <code>List</code> 接口中的 <code>sort()</code> 方法来分析。只有类，即 <code>AbstractList</code> 和 <code>MyList</code> 才能实际实现此方法，而具体实现是完全一致的，这就需要我们复制代码了。有人说，为什么不直接继承 <code>AbstractList</code> ，我们都知道Java中是不允许多继承的，有些情况会让你不得不这么做。</p>
+<p>Java API的设计者非常清楚这个问题，因此将 <code>sort()</code> 方法移到了一个只有静态方法的无关类中，没错，就是 <code>Collections</code> ，这样虽然解决了问题，但是却偏离的Java面向对象的思想。</p>
+<p>Java 7中 <code>Collections.sort(List&lt;T&gt; list)</code> 方法实现如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T extends Comparable&lt;? <span class="keyword">super</span> T&gt;&gt; <span class="function"><span class="keyword">void</span> <span class="title">sort</span><span class="params">(List&lt;T&gt; list)</span> </span>&#123;</span><br><span class="line">      Object[] a = list.toArray();</span><br><span class="line">      Arrays.sort(a);</span><br><span class="line">      ListIterator&lt;T&gt; i = list.listIterator();</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;a.length; j++) &#123;</span><br><span class="line">          i.next();</span><br><span class="line">          i.set((T)a[j]);</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Default-Method-改善"><a href="#Default-Method-改善" class="headerlink" title="Default Method 改善"></a>Default Method 改善</h4><p>Java8 引入Default Method后，很大程度上可以减少 <code>Abstract</code> 类的依赖，也能更好的实现“面向对象”，毕竟排序应当属于 <code>List</code> 本身的行为。</p>
+<p>Java 8中 <code>Collections</code> 将 <code>sort()</code> 方法还给 <code>List</code>。<br><code>Collections.sort(List&lt;T&gt; list)</code> 方法实现如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T extends Comparable&lt;? <span class="keyword">super</span> T&gt;&gt; <span class="function"><span class="keyword">void</span> <span class="title">sort</span><span class="params">(List&lt;T&gt; list)</span> </span>&#123;</span><br><span class="line">    list.sort(<span class="keyword">null</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>List</code> 接口中的 <code>sort()</code> 方法如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">sort</span><span class="params">(Comparator&lt;? <span class="keyword">super</span> E&gt; c)</span> </span>&#123;</span><br><span class="line">    Object[] a = <span class="keyword">this</span>.toArray();</span><br><span class="line">    Arrays.sort(a, (Comparator) c);</span><br><span class="line">    ListIterator&lt;E&gt; i = <span class="keyword">this</span>.listIterator();</span><br><span class="line">    <span class="keyword">for</span> (Object e : a) &#123;</span><br><span class="line">        i.next();</span><br><span class="line">        i.set((E) e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>参考资料:</p>
 <ul>
 <li><a href="https://blog.frankel.ch/default-methods-java-8/" target="_blank" rel="noopener">Default methods in Java 8, and what it changes in API design</a></li>
