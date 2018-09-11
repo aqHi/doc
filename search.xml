@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title><![CDATA[改善接口(Api)设计 - Java 8 默认方法（Default Method）]]></title>
+    <url>%2F2018%2F09%2F07%2Fjava8_default_method%2F</url>
+    <content type="text"><![CDATA[简介：本文通过分析对JDK中对默认方法 (default method) 的应用，浅析默认方法的作用，以及对我们接口设计的一些启发。 Default methods enable new functionality to be added to the interfaces of libraries and ensure binary compatibility with code written for older versions of those interfaces. 默认方法允许您添加新的功能到现有库的接口中，并能确保与采用旧版本接口编写的代码的二进制兼容性。 什么是默认方法 接口本身只能进行方法的定义，默认方法就是接口方法的“默认实现”。接口方法前加上关键字default即可。 为什么要有默认方法在 Java 8 之前，接口与其实现类之间的耦合度太高（tightly coupled），当需要为一个接口添加方法时，所有的实现类都必须随之修改。默认方法解决了这个问题，它可以为接口添加新的方法，而不会破坏已有的接口的实现。这在 lambda 表达式作为 Java 8 语言的重要特性而出现之际，为升级旧接口且保持向后兼容（backward compatibility）提供了途径。同时，默认方法的加入，也能改变传统Java接口的设计思想(Java 被人诟病的 Interface -&gt; Abstract -&gt; Class 模式)，简化接口设计。 Java 8中 Iterable 接口中的 forEach 方法: 123456789default void forEach(Consumer&lt;? super T&gt; var1) &#123; Objects.requireNonNull(var1); Iterator var2 = this.iterator(); while(var2.hasNext()) &#123; Object var3 = var2.next(); var1.accept(var3); &#125; &#125; Java传统接口设计模式Java 8之前，接口只能作为声明但不能提供任何实现。因此，为了添加一些实现，我们都需要一个 Abstract 类，如下图： 接口层定义相关方法 Abstract 类实现公共方法 如果子类需要自己需要自己的行为则直接重写(Override)即可。 问题产生在大部分的情况下，这种设计都是没有问题的，但是还是比较繁琐，下面是 Java Collections API List部分的继承关系： 我们以 List 接口中的 sort() 方法来分析。只有类，即 AbstractList 和 MyList 才能实际实现此方法，而具体实现是完全一致的，这就需要我们复制代码了。有人说，为什么不直接继承 AbstractList ，我们都知道Java中是不允许多继承的，有些情况会让你不得不这么做。 Java API的设计者非常清楚这个问题，因此将 sort() 方法移到了一个只有静态方法的无关类中，没错，就是 Collections ，这样虽然解决了问题，但是却偏离的Java面向对象的思想。 Java 7中 Collections.sort(List&lt;T&gt; list) 方法实现如下： 123456789public static &lt;T extends Comparable&lt;? super T&gt;&gt; void sort(List&lt;T&gt; list) &#123; Object[] a = list.toArray(); Arrays.sort(a); ListIterator&lt;T&gt; i = list.listIterator(); for (int j=0; j&lt;a.length; j++) &#123; i.next(); i.set((T)a[j]); &#125; &#125; Default Method 改善Java8 引入Default Method后，很大程度上可以减少 Abstract 类的依赖，也能更好的实现“面向对象”，毕竟排序应当属于 List 本身的行为。 Java 8中 Collections 将 sort() 方法还给 List。Collections.sort(List&lt;T&gt; list) 方法实现如下： 123public static &lt;T extends Comparable&lt;? super T&gt;&gt; void sort(List&lt;T&gt; list) &#123; list.sort(null);&#125; List 接口中的 sort() 方法如下： 123456789default void sort(Comparator&lt;? super E&gt; c) &#123; Object[] a = this.toArray(); Arrays.sort(a, (Comparator) c); ListIterator&lt;E&gt; i = this.listIterator(); for (Object e : a) &#123; i.next(); i.set((E) e); &#125;&#125; 参考资料: Default methods in Java 8, and what it changes in API design Java 8 默认方法（Default Methods）]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>源码解析</tag>
+        <tag>Java 8</tag>
+        <tag>默认方法</tag>
+        <tag>Default Method</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Redis迁移之主从同步]]></title>
+    <url>%2F2018%2F09%2F06%2F%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%81%E7%A7%BB%2F</url>
+    <content type="text"><![CDATA[Redis服务器迁移有多种方案，主从同步是一种比较安全的方案。具体思想是先给主库挂载一个从库，同步完成后切换到从库即可。 策略：主从同步老服务器 old 新服务器 new Ⅰ 修改相关配置 redis版本大于2.6 在服务器(new)上启动一个redis实例,由于redis2.6以后，redis的slave默认变得不再接受写操作，因此我们需要修改相关配置，有以下两种方式： 1.直接修改配置(推荐)，同步后再改为yes，避免引起其他问题 12127.0.0.1:6379&gt; CONFIG SET slave-read-only noOK 2.修改conf文件，如果不知道conf文件在哪儿可以使用info命令查询 12#slave-read-only yesslave-read-only no 主库有密码 从库需要设置master密码，可以直接更改conf文件，或者直接使用命令 1.直接修改配置(推荐) 12127.0.0.1:6379&gt; CONFIG SET masterauth authOK 2.修改conf文件 1masterauth auth Ⅱ 将新的redis 服务成为slave12127.0.0.1:6379&gt; SLAVEOF 192.168.1.102 6379OK 使用info命令可以查看redis状态 Ⅲ 完成迁移查看日志，待出现success时，说明已完成当前同步，如下： 1236600:S 06 Sep 16:49:40.984 * MASTER &lt;-&gt; SLAVE sync: Loading DB in memory36600:S 06 Sep 16:49:40.985 * MASTER &lt;-&gt; SLAVE sync: Finished with success 设新服务器为master 1SLAVEOF no one 如果使用命令修改了配置，建议改回 12345127.0.0.1:6379&gt; CONFIG SET slave-read-only yesOK127.0.0.1:6379&gt; CONFIG SET masterauth ‘’OK]]></content>
+      <categories>
+        <category>运维</category>
+      </categories>
+      <tags>
+        <tag>Redis</tag>
+        <tag>数据库</tag>
+        <tag>主从同步</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[基于docker的ELK分布式日志系统搭建]]></title>
+    <url>%2F2018%2F09%2F06%2Felk%2F</url>
+    <content type="text"><![CDATA[简介ELK (ElasticSearch, Logstash, Kibana) 架构概述 ElasticSearch Elasticsearch 是一个分布式、可扩展、实时的搜索与数据分析的开源搜索引擎。此处我们不深究其强大的功能，仅仅用来检索日志。 Logstash Logstash 是开源的服务器端数据处理管道，能够同时从多个来源采集数据，转换数据，然后将数据发送到您最喜欢的 “存储库” 中。 Kinaba Kibana 是一款开源的数据分析和可视化平台，它是 Elastic Stack 成员之一，设计用于和 Elasticsearch 协作。您可以使用 Kibana 对 Elasticsearch 索引中的数据进行搜索、查看、交互操作。您可以很方便的利用图表、表格及地图对数据进行多元化的分析和呈现。 Kibana 可以使大数据通俗易懂。它很简单，基于浏览器的界面便于您快速创建和分享动态数据仪表板来追踪 Elasticsearch 的实时数据变化。 安装ELK此处使用ELK合并的elk-docker 从远程提取镜像1sudo docker pull sebp/elk 默认提取最新镜像,如果要使用其他版本，使用如下命令： 1sudo docker pull sebp/elk:E1L1K4 此命令(E1L1K4)表示使用 Elasticsearch 1.x ， Logstash 1.x ，Kibana 4.x 。 运行容器1sudo docker run -p 5601:5601 -p 9200:9200 -p 5044:5044 -it --name elk sebp/elk 此命令将暴露以下端口，分别是三个程序所需要的： 5061 (Kibana Web 端口). 9200 (Elasticsearch JSON 端口). 5044 (Logstash Beats 端口, Logstash 接受日志的端口，如来自filebeats的日志). 附： docker run -p xxx:yyy 表示将容器yyy端口映射到主机xxx端口 容器运行起来后 访问http://your-host:5601，如果能看的Kinaba管理页面，证明安装成功 配置]]></content>
+      <categories>
+        <category>运维</category>
+      </categories>
+      <tags>
+        <tag>分布式日志</tag>
+        <tag>Elashticsearch</tag>
+        <tag>Logstash</tag>
+        <tag>Kibana</tag>
+        <tag>docker</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Executors 源码解析]]></title>
+    <url>%2F2018%2F09%2F03%2FExecutors%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%2F</url>
+    <content type="text"><![CDATA[Executors 源码解析…. newFixedThreadPool 定义 123456789101112/** * ...... * @param nThreads the number of threads in the pool * @return the newly created thread pool * @throws IllegalArgumentException if &#123;@code nThreads &lt;= 0&#125; */public static ExecutorService newFixedThreadPool(int nThreads) &#123; return new ThreadPoolExecutor(nThreads, nThreads, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue&lt;Runnable&gt;());&#125; 创建可容纳固定数量(nThreads)线程的线程池； 每个线程的存活时间不限(0L),当线程池满后不在添加新的线程; 如果线程池中所有线程都处于繁忙状态，新的任务将会进入阻塞队列(LinkedBlockingQueue); newSingleThreadExecutor12345678910/** *...... * @return the newly created single-threaded Executor */public static ExecutorService newSingleThreadExecutor() &#123; return new FinalizableDelegatedExecutorService (new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue&lt;Runnable&gt;())); 创建一个只有一个线程的线程池; 每个线程存活时间不限(0L); 如果该线程处于繁忙状态，新的任务将会进入阻塞队列(LinkedBlockingQueue); 适用场景：一个任务一个任务执行的场景 newCachedThreadPool1234567891011/** * ...... * @return the newly created thread pool */public static ExecutorService newCachedThreadPool() &#123; return new ThreadPoolExecutor(0, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS, new SynchronousQueue&lt;Runnable&gt;());&#125; ScheduledThreadPoolExecutor12345678910111213/** * Creates a new &#123;@code ScheduledThreadPoolExecutor&#125; with the * given core pool size. * * @param corePoolSize the number of threads to keep in the pool, even * if they are idle, unless &#123;@code allowCoreThreadTimeOut&#125; is set * @throws IllegalArgumentException if &#123;@code corePoolSize &lt; 0&#125; */public ScheduledThreadPoolExecutor(int corePoolSize) &#123; super(corePoolSize, Integer.MAX_VALUE, 0, NANOSECONDS, new DelayedWorkQueue());&#125;]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>多线程</tag>
+        <tag>并发</tag>
+        <tag>Executors</tag>
+        <tag>ThreadPool</tag>
+        <tag>源码解析</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[将Linux应用程序注册为服务]]></title>
+    <url>%2F2018%2F08%2F06%2FLinux%E6%B3%A8%E5%86%8C%E6%9C%8D%E5%8A%A1%2F</url>
+    <content type="text"><![CDATA[日常运维中，难免会出现程序崩溃，服务器卡死等情况。如果没有良好的自动处理系统，恢复起来将非常困难，如果是线上环境很可能造成极大的损失。本文将简单介绍使用Linux 服务来管理程序。 简介 创建 1cd /etc/systemd/system 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152[Unit]# 对当前服务的描述Description=ebook_task# 启动顺序，在network.target启动之后启动# After=network.target# 启动顺序，在network.target启动之前启动 # Before =network.target[Service]# 工作的根本目录WorkingDirectory=/root/deploy/ebook/ebook_task# 服务执行的命令ExecStart=/usr/bin/java -jar /root/deploy/ebook/ebook_task/ebook_task.jar --spring.profiles.active=dev# ExecReload：指定单元停止时执行的命令或者脚本。# ExecStop：指定单元停止时执行的命令或者脚本。# 重启策略# on-failure 程序意外退出(exit status is not 0)Restart=always# 重启时间 默认 100msRestartSec=5# SyslogIdentifier=ebook_task# 服务用户User=rootStandardOutput=null#Environment=ASPNETCORE_ENVIRONMENT=Production#Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false# simple（默认值）：systemd认为该服务将立即启动。服务进程不会fork。如果该服务要启动其他服务，不要使用此类型启动，除非该服务是socket激活型。# forking：systemd认为当该服务进程fork，且父进程退出后服务启动成功。对于常规的守护进程（daemon），除非你确定此启动方式无法满足需求，使用此类型启动即可。使用此启动类型应同时指定 PIDFile=，以便systemd能够跟踪服务的主进程。# oneshot：这一选项适用于只执行一项任务、随后立即退出的服务。可能需要同时设置 RemainAfterExit=yes 使得 systemd 在服务进程退出之后仍然认为服务处于激活状态。# notify：与 Type=simple 相同，但约定服务会在就绪后向 systemd 发送一个信号。这一通知的实现由 libsystemd-daemon.so 提供。# dbus：若以此方式启动，当指定的 BusName 出现在DBus系统总线上时，systemd认为服务就绪。# idle: systemd会等待所有任务(Jobs)处理完成后，才开始执行idle类型的单元。除此之外，其他行为和Type=simple 类似。# Type=simple[Install]WantedBy=multi-user.target]]></content>
+      <categories>
+        <category>运维</category>
+      </categories>
+      <tags>
+        <tag>Linux 服务</tag>
+        <tag>systemd</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[HTTPS 原理解析]]></title>
+    <url>%2F2016%2F07%2F13%2FHTTPS%20%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90%2F</url>
+    <content type="text"><![CDATA[HTTPS（全称：Hyper Text Transfer Protocol over Secure Socket Layer），是以安全为目标的HTTP通道，简单讲是HTTP的安全版。 一 前言在说HTTPS之前先说说什么是HTTP，HTTP就是我们平时浏览网页时候使用的一种协议。HTTP协议传输的数据都是未加密的，也就是明文的，因此使用HTTP协议传输隐私信息非常不安全。为了保证这些隐私数据能加密传输，于是网景公司设计了SSL（Secure Sockets Layer）协议用于对HTTP协议传输的数据进行加密，从而就诞生了HTTPS。SSL目前的版本是3.0，被IETF（Internet Engineering Task Force）定义在RFC 6101中，之后IETF对SSL 3.0进行了升级，于是出现了TLS（Transport Layer Security） 1.0，定义在RFC 2246。实际上我们现在的HTTPS都是用的TLS协议，但是由于SSL出现的时间比较早，并且依旧被现在浏览器 所支持，因此SSL依然是HTTPS的代名词，但无论是TLS还是SSL都是上个世纪的事情，SSL最后一个版本是3.0，今后TLS将会继承 SSL优良血统继续为我们进行加密服务。目前TLS的版本是1.2，定义在RFC 5246中，暂时还没有被广泛的使用 () 二 HTTPS 验证原理Https在真正请求数据前，先会与服务有几次握手验证，以证明相互的身份，以下图为例]]></content>
+      <categories>
+        <category>网络</category>
+      </categories>
+      <tags>
+        <tag>HTTPS</tag>
+        <tag>HTTP</tag>
+      </tags>
+  </entry>
+</search>
