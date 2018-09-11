@@ -523,6 +523,20 @@
 <p>如果使用命令修改了配置，建议改回</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; CONFIG SET slave-read-only yes</span><br><span class="line">OK</span><br><span class="line"></span><br><span class="line">127.0.0.1:6379&gt; CONFIG SET masterauth ‘’</span><br><span class="line">OK</span><br></pre></td></tr></table></figure>
 
+      <script>
+        window.disqusProxy={
+          shortname: 'aqhi',
+          username: 'aqHi',
+          server: 'ss.aqhi.net',
+          port: 5509,
+          adminAvatar: '/avatars/admin-avatar.jpg',
+          identifier: '2018/09/06/服务器迁移/',
+        };
+        window.disqus_config = function () {
+          this.page.url = window.location.href;
+          this.page.identifier = window.disqusProxy.identifier;
+        };
+      </script>
         
     
 
@@ -537,7 +551,13 @@
                     
     <!-- 使用 DISQUS -->
 <div id="disqus-comment">
-    <div id="disqus_thread"></div>
+    
+      <script src="//cdn.bootcss.com/react/16.0.0/umd/react.production.min.js"></script>
+      <script src="//cdn.bootcss.com/react-dom/16.0.0/umd/react-dom.production.min.js"></script>
+      <script src="//cdn.bootcss.com/fetch/2.0.3/fetch.min.js"></script>
+      <script src="//cdn.jsdelivr.net/npm/blockies-identicon@0.1.0/blockies.min.js"></script>
+      <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+      <div id="disqus_proxy_thread"><script src="/scripts/hexo-disqus-proxy-primary.js" async></script></div>
 <script type="text/javascript">
     var disqus_config = function () {
         this.page.url = 'http://yoursite.com/2018/09/06/服务器迁移/';  // Replace PAGE_URL with your page's canonical URL variable
@@ -551,7 +571,7 @@
                 var s = d.createElement('script');
                 s.src = '//aqhi.disqus.com/embed.js';
                 s.setAttribute('data-timestamp', + new Date());
-                (d.head || d.body).appendChild(s);
+                
             })();
         });
 </script>

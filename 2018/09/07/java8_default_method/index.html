@@ -531,6 +531,20 @@
 <li><a href="http://ebnbin.com/2015/12/20/java-8-default-methods" target="_blank" rel="noopener">Java 8 默认方法（Default Methods）</a></li>
 </ul>
 
+      <script>
+        window.disqusProxy={
+          shortname: 'aqhi',
+          username: 'aqHi',
+          server: 'ss.aqhi.net',
+          port: 5509,
+          adminAvatar: '/avatars/admin-avatar.jpg',
+          identifier: '2018/09/07/java8_default_method/',
+        };
+        window.disqus_config = function () {
+          this.page.url = window.location.href;
+          this.page.identifier = window.disqusProxy.identifier;
+        };
+      </script>
         
     
 
@@ -545,7 +559,13 @@
                     
     <!-- 使用 DISQUS -->
 <div id="disqus-comment">
-    <div id="disqus_thread"></div>
+    
+      <script src="//cdn.bootcss.com/react/16.0.0/umd/react.production.min.js"></script>
+      <script src="//cdn.bootcss.com/react-dom/16.0.0/umd/react-dom.production.min.js"></script>
+      <script src="//cdn.bootcss.com/fetch/2.0.3/fetch.min.js"></script>
+      <script src="//cdn.jsdelivr.net/npm/blockies-identicon@0.1.0/blockies.min.js"></script>
+      <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+      <div id="disqus_proxy_thread"><script src="/scripts/hexo-disqus-proxy-primary.js" async></script></div>
 <script type="text/javascript">
     var disqus_config = function () {
         this.page.url = 'http://yoursite.com/2018/09/07/java8_default_method/';  // Replace PAGE_URL with your page's canonical URL variable
@@ -559,7 +579,7 @@
                 var s = d.createElement('script');
                 s.src = '//aqhi.disqus.com/embed.js';
                 s.setAttribute('data-timestamp', + new Date());
-                (d.head || d.body).appendChild(s);
+                
             })();
         });
 </script>

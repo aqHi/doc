@@ -489,6 +489,20 @@
 </ul>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /etc/systemd/system</span><br></pre></td></tr></table></figure>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[Unit]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 对当前服务的描述</span></span><br><span class="line">Description=ebook_task</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动顺序，在network.target启动之后启动</span></span><br><span class="line"><span class="comment"># After=network.target</span></span><br><span class="line"><span class="comment"># 启动顺序，在network.target启动之前启动 </span></span><br><span class="line"><span class="comment"># Before =network.target</span></span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 工作的根本目录</span></span><br><span class="line">WorkingDirectory=/root/deploy/ebook/ebook_task</span><br><span class="line"></span><br><span class="line"><span class="comment"># 服务执行的命令</span></span><br><span class="line">ExecStart=/usr/bin/java -jar /root/deploy/ebook/ebook_task/ebook_task.jar --spring.profiles.active=dev</span><br><span class="line"></span><br><span class="line"><span class="comment"># ExecReload：指定单元停止时执行的命令或者脚本。</span></span><br><span class="line"><span class="comment"># ExecStop：指定单元停止时执行的命令或者脚本。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 重启策略</span></span><br><span class="line"><span class="comment"># on-failure   程序意外退出(exit status is not 0)</span></span><br><span class="line">Restart=always</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重启时间 默认 100ms</span></span><br><span class="line">RestartSec=5</span><br><span class="line"></span><br><span class="line"><span class="comment"># </span></span><br><span class="line">SyslogIdentifier=ebook_task</span><br><span class="line"></span><br><span class="line"><span class="comment"># 服务用户</span></span><br><span class="line">User=root</span><br><span class="line">StandardOutput=null</span><br><span class="line"><span class="comment">#Environment=ASPNETCORE_ENVIRONMENT=Production</span></span><br><span class="line"><span class="comment">#Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># simple（默认值）：systemd认为该服务将立即启动。服务进程不会fork。如果该服务要启动其他服务，不要使用此类型启动，除非该服务是socket激活型。</span></span><br><span class="line"><span class="comment"># forking：systemd认为当该服务进程fork，且父进程退出后服务启动成功。对于常规的守护进程（daemon），除非你确定此启动方式无法满足需求，使用此类型启动即可。使用此启动类型应同时指定 PIDFile=，以便systemd能够跟踪服务的主进程。</span></span><br><span class="line"><span class="comment"># oneshot：这一选项适用于只执行一项任务、随后立即退出的服务。可能需要同时设置 RemainAfterExit=yes 使得 systemd 在服务进程退出之后仍然认为服务处于激活状态。</span></span><br><span class="line"><span class="comment"># notify：与 Type=simple 相同，但约定服务会在就绪后向 systemd 发送一个信号。这一通知的实现由 libsystemd-daemon.so 提供。</span></span><br><span class="line"><span class="comment"># dbus：若以此方式启动，当指定的 BusName 出现在DBus系统总线上时，systemd认为服务就绪。</span></span><br><span class="line"><span class="comment"># idle: systemd会等待所有任务(Jobs)处理完成后，才开始执行idle类型的单元。除此之外，其他行为和Type=simple 类似。</span></span><br><span class="line"><span class="comment"># Type=simple</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
+      <script>
+        window.disqusProxy={
+          shortname: 'aqhi',
+          username: 'aqHi',
+          server: 'ss.aqhi.net',
+          port: 5509,
+          adminAvatar: '/avatars/admin-avatar.jpg',
+          identifier: '2018/09/06/Linux注册服务/',
+        };
+        window.disqus_config = function () {
+          this.page.url = window.location.href;
+          this.page.identifier = window.disqusProxy.identifier;
+        };
+      </script>
         
     
 
@@ -503,7 +517,13 @@
                     
     <!-- 使用 DISQUS -->
 <div id="disqus-comment">
-    <div id="disqus_thread"></div>
+    
+      <script src="//cdn.bootcss.com/react/16.0.0/umd/react.production.min.js"></script>
+      <script src="//cdn.bootcss.com/react-dom/16.0.0/umd/react-dom.production.min.js"></script>
+      <script src="//cdn.bootcss.com/fetch/2.0.3/fetch.min.js"></script>
+      <script src="//cdn.jsdelivr.net/npm/blockies-identicon@0.1.0/blockies.min.js"></script>
+      <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+      <div id="disqus_proxy_thread"><script src="/scripts/hexo-disqus-proxy-primary.js" async></script></div>
 <script type="text/javascript">
     var disqus_config = function () {
         this.page.url = 'http://yoursite.com/2018/09/06/Linux注册服务/';  // Replace PAGE_URL with your page's canonical URL variable
@@ -517,7 +537,7 @@
                 var s = d.createElement('script');
                 s.src = '//aqhi.disqus.com/embed.js';
                 s.setAttribute('data-timestamp', + new Date());
-                (d.head || d.body).appendChild(s);
+                
             })();
         });
 </script>

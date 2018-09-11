@@ -520,6 +520,20 @@
 </ul>
 <h5 id="容器运行起来后"><a href="#容器运行起来后" class="headerlink" title="容器运行起来后"></a>容器运行起来后</h5><p> 访问<a href="http://your-host:5601，如果能看的Kinaba管理页面，证明安装成功" target="_blank" rel="noopener">http://your-host:5601，如果能看的Kinaba管理页面，证明安装成功</a></p>
 <h5 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h5>
+      <script>
+        window.disqusProxy={
+          shortname: 'aqhi',
+          username: 'aqHi',
+          server: 'ss.aqhi.net',
+          port: 5509,
+          adminAvatar: '/avatars/admin-avatar.jpg',
+          identifier: '2018/09/06/elk/',
+        };
+        window.disqus_config = function () {
+          this.page.url = window.location.href;
+          this.page.identifier = window.disqusProxy.identifier;
+        };
+      </script>
         
     
 
@@ -534,7 +548,13 @@
                     
     <!-- 使用 DISQUS -->
 <div id="disqus-comment">
-    <div id="disqus_thread"></div>
+    
+      <script src="//cdn.bootcss.com/react/16.0.0/umd/react.production.min.js"></script>
+      <script src="//cdn.bootcss.com/react-dom/16.0.0/umd/react-dom.production.min.js"></script>
+      <script src="//cdn.bootcss.com/fetch/2.0.3/fetch.min.js"></script>
+      <script src="//cdn.jsdelivr.net/npm/blockies-identicon@0.1.0/blockies.min.js"></script>
+      <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+      <div id="disqus_proxy_thread"><script src="/scripts/hexo-disqus-proxy-primary.js" async></script></div>
 <script type="text/javascript">
     var disqus_config = function () {
         this.page.url = 'http://yoursite.com/2018/09/06/elk/';  // Replace PAGE_URL with your page's canonical URL variable
@@ -548,7 +568,7 @@
                 var s = d.createElement('script');
                 s.src = '//aqhi.disqus.com/embed.js';
                 s.setAttribute('data-timestamp', + new Date());
-                (d.head || d.body).appendChild(s);
+                
             })();
         });
 </script>
