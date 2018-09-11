@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://aqhi.net/sitemap.xml
+Sitemap: https://aqhi.net/baidusitemap.xml
