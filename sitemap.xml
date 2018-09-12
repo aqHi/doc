@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://aqhi.net/about/index.html</loc>
+    
+    <lastmod>2018-09-12T06:22:48.147Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://aqhi.net/2018/09/07/java8_default_method/</loc>
     
     <lastmod>2018-09-11T07:04:50.921Z</lastmod>
@@ -61,13 +68,6 @@
     <loc>https://aqhi.net/categories/index.html</loc>
     
     <lastmod>2018-09-11T06:10:51.168Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://aqhi.net/about/index.html</loc>
-    
-    <lastmod>2018-09-11T04:14:28.058Z</lastmod>
     
   </url>
   
