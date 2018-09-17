@@ -3,6 +3,30 @@
 
 
     
+  <url>
+    <loc>https://aqhi.net/2018/09/17/java_reference/</loc>
+    <lastmod>2018-09-17T08:21:43.367Z</lastmod>
+    <data>
+        <display>
+        <title>Java引用类型-强引用、软引用、弱引用、虚引用</title>
+        <pubTime>2018-09-17T03:12:10.000Z</pubTime>
+        
+        <tag>Java Reference</tag>
+         
+        <tag>垃圾回收</tag>
+         
+        <tag>Java引用类型</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="https://aqhi.net/categories/Java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
     
   <url>
     <loc>https://aqhi.net/2018/09/07/java8_default_method/</loc>
