@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title></title>
+    <url>%2F2019%2F03%2F01%2Fdocker-redis%2F</url>
+    <content type="text"></content>
+  </entry>
+  <entry>
+    <title><![CDATA[Docker MySQL(mariadb) 安装配置及注意事项]]></title>
+    <url>%2F2018%2F12%2F09%2Fdocker%20mysql%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E5%8F%8A%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9%2F</url>
+    <content type="text"><![CDATA[简介：本文将详细介绍基于Docker的MySQL数据库的安装，配置及注意事项。以下内容均为实际应用中遇到的具体情况。 MySQL配置123456789[client]default-character-set=utf8mb4[mysql]default-character-set=utf8mb4[mysqld]character-set-server = utf8mb4collation-server = utf8mb4_general_ci 这里直接使用 utf8mb4 而不要使用 utf8 ,实际应用中 utf8 编码无法存储一些特殊字符，比如emoji表情，实际应用中昵称、评论、帖子等都有可能受到影响。(最初的 UTF-8 格式使用一至六个字节，最大能编码 31 位字符。最新的 UTF-8 规范(utf8mb4)只使用一到四个字节，最大能编码21位，正好能够表示所有的 17个 Unicode 平面)。 新建mysql库或者表的时候还有一个排序规则。utf8_unicode_ci 比较准确，utf8_general_ci 速度比较快。通常情况下 utf8_general_ci 的准确性就够我们用的了，在我看过很多程序源码后，发现它们大多数也用的是 utf8_general_ci，所以新建数据 库时一般选用utf8_general_ci 就可以了。 命令行安装1. 搜索镜像123456➜ ~ docker search mysqlNAME DESCRIPTION STARS OFFICIAL AUTOMATEDmysql MySQL is a widely used, open-source relation… 7859 [OK]mariadb MariaDB is a community-developed fork of MyS… 2608 [OK]mysql/mysql-server Optimized MySQL Server Docker images. Create… 592 [OK]··· 2. 拉取镜像(指定版本)1➜ ~ docker pull mysql:5.7 3. 运行命令123456➜ ~ docker run --name mysql \-p 3306:3306 \-v /data/mysql:/var/lib/mysql \-v /etc/mysql/conf.d:/etc/mysql/conf.d \-e MYSQL_ROOT_PASSWORD=&apos;root&apos; \-d mysql:5.7 -p 3306:3306 将docker容器3306端口映射到本机3306端口。 -v /data/mysql:/var/lib/mysql 将主机 /data/mysql 目录挂载到容器的 /var/lib/mysql -v /etc/mysql/conf.d:/etc/mysql/conf.d 将主机 /etc/mysql/conf.d 目录挂载到容器的对应目录，此目录为配置目录，方便对mysql配置进行管理。 -e MYSQL_ROOT_PASSWORD=&#39;root&#39; 初始化root密码。-e 传参数 -d 后台运行]]></content>
+      <categories>
+        <category>docker</category>
+      </categories>
+      <tags>
+        <tag>docker mysql</tag>
+        <tag>docker mariadb</tag>
+        <tag>安装</tag>
+        <tag>配置</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[理解阿里云mysql设计规范]]></title>
     <url>%2F2018%2F10%2F06%2F%E7%90%86%E8%A7%A3%E9%98%BF%E9%87%8C%E4%BA%91mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83%2F</url>
     <content type="text"><![CDATA[MySql作为一般公司最常用的关系型数据库，需要按照一定的规范来进行设计和运用，才能优雅的进行后续的开发。本文通过对阿里云mysql设计规范进行理解，来详细阐述各个规范的相关场景。 建表规约 【强制】表达是与否概念的字段，必须使用 is_xxx 的方式命名，数据类型是 unsigned tinyint（1 表示是，0 表示否）。 说明：任何字段如果为非负数，必须是 unsigned。 注意：POJO 类中的任何布尔类型的变量，都不要加 is 前缀，所以，需要在设置从 is_xxx 到 Xxx 的映射关系。数据库表示是与否的值，使用 tinyint 类型，坚持 is_xxx 的命名方式是为了明确其取值含义与取值范围。 正例：表达逻辑删除的字段名 is_deleted，1 表示删除，0 表示未删除。]]></content>

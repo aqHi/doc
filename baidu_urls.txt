@@ -1,1 +1,1 @@
-https://aqhi.net/2018/10/06/理解阿里云mysql数据库设计规范/
+https://aqhi.net/2019/03/01/docker-redis/
