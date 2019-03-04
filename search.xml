@@ -16,8 +16,8 @@
         <category>运维</category>
       </categories>
       <tags>
-        <tag>mysql</tag>
         <tag>数据库</tag>
+        <tag>mysql</tag>
         <tag>表设计规范</tag>
         <tag>阿里云规范</tag>
       </tags>
@@ -49,8 +49,8 @@
         <category>运维</category>
       </categories>
       <tags>
-        <tag>数据库</tag>
         <tag>Redis</tag>
+        <tag>数据库</tag>
         <tag>主从同步</tag>
       </tags>
   </entry>

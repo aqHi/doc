@@ -1,1 +1,10 @@
 https://aqhi.net/docker mysql 安装配置及注意事项.html
+https://aqhi.net/理解阿里云mysql数据库设计规范.html
+https://aqhi.net/java_reference.html
+https://aqhi.net/java8_default_method.html
+https://aqhi.net/服务器迁移.html
+https://aqhi.net/elk.html
+https://aqhi.net/Executors源码解析.html
+https://aqhi.net/Spring中的设计模式-Design Pattern In Spring.html
+https://aqhi.net/Linux注册服务.html
+https://aqhi.net/HTTPS 原理解析.html
