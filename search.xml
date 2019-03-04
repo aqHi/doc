@@ -7,12 +7,6 @@
       <categories>
         <category>docker</category>
       </categories>
-      <tags>
-        <tag>docker mysql</tag>
-        <tag>docker mariadb</tag>
-        <tag>安装</tag>
-        <tag>配置</tag>
-      </tags>
   </entry>
   <entry>
     <title><![CDATA[理解阿里云mysql设计规范]]></title>
@@ -22,8 +16,8 @@
         <category>运维</category>
       </categories>
       <tags>
-        <tag>mysql</tag>
         <tag>数据库</tag>
+        <tag>mysql</tag>
         <tag>表设计规范</tag>
         <tag>阿里云规范</tag>
       </tags>
@@ -46,12 +40,6 @@
       <categories>
         <category>Java</category>
       </categories>
-      <tags>
-        <tag>源码解析</tag>
-        <tag>Java 8</tag>
-        <tag>默认方法</tag>
-        <tag>Default Method</tag>
-      </tags>
   </entry>
   <entry>
     <title><![CDATA[Redis迁移之主从同步]]></title>
@@ -61,8 +49,8 @@
         <category>运维</category>
       </categories>
       <tags>
-        <tag>数据库</tag>
         <tag>Redis</tag>
+        <tag>数据库</tag>
         <tag>主从同步</tag>
       </tags>
   </entry>

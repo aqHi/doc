@@ -2,16 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://aqhi.net/java_reference.html</loc>
+    <loc>https://aqhi.net/java8_default_method.html</loc>
     
-    <lastmod>2019-03-04T03:05:40.925Z</lastmod>
+    <lastmod>2019-03-04T03:17:54.220Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://aqhi.net/docker%20mysql%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E5%8F%8A%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9.html</loc>
     
-    <lastmod>2019-03-04T02:54:50.229Z</lastmod>
+    <lastmod>2019-03-04T03:17:40.176Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://aqhi.net/java_reference.html</loc>
+    
+    <lastmod>2019-03-04T03:05:40.925Z</lastmod>
     
   </url>
   
@@ -33,13 +40,6 @@
     <loc>https://aqhi.net/about/index.html</loc>
     
     <lastmod>2018-09-12T06:22:48.147Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://aqhi.net/java8_default_method.html</loc>
-    
-    <lastmod>2018-09-11T07:04:50.921Z</lastmod>
     
   </url>
   
