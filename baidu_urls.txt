@@ -1,1 +1,1 @@
-https://aqhi.net/2018/12/09/docker mysql 安装配置及注意事项/
+https://aqhi.net/docker mysql 安装配置及注意事项.html

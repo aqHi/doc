@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title><![CDATA[Docker MySQL(mariadb) 安装配置及注意事项]]></title>
-    <url>%2F2018%2F12%2F09%2Fdocker%20mysql%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E5%8F%8A%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9%2F</url>
+    <url>%2Fdocker%20mysql%20%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E5%8F%8A%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9.html</url>
     <content type="text"><![CDATA[简介：本文将详细介绍基于Docker的MySQL数据库的安装，配置及注意事项。以下内容均为实际应用中遇到的具体情况。 MySQL安装1. 搜索镜像123456➜ ~ docker search mysqlNAME DESCRIPTION STARS OFFICIAL AUTOMATEDmysql MySQL is a widely used, open-source relation… 7859 [OK]mariadb MariaDB is a community-developed fork of MyS… 2608 [OK]mysql/mysql-server Optimized MySQL Server Docker images. Create… 592 [OK]··· 2. 拉取镜像(指定版本)1➜ ~ docker pull mysql:5.7 3. 运行命令123456➜ ~ docker run --name mysql \-p 3306:3306 \-v /data/mysql:/var/lib/mysql \-v /etc/mysql/conf.d:/etc/mysql/conf.d \-e MYSQL_ROOT_PASSWORD=&apos;root&apos; \-d mysql:5.7 -p 3306:3306 将docker容器3306端口映射到本机3306端口。 -v /data/mysql:/var/lib/mysql 将主机 /data/mysql 目录挂载到容器的 /var/lib/mysql -v /etc/mysql/conf.d:/etc/mysql/conf.d 将主机 /etc/mysql/conf.d 目录挂载到容器的对应目录，此目录为配置目录，方便对mysql配置进行管理。 -e MYSQL_ROOT_PASSWORD=&#39;root&#39; 初始化root密码。-e 传参数 -d 后台运行 MySQL创建用户并授权1. 创建用户1CREATE USER &apos;username&apos;@&apos;localhost&apos; IDENTIFIED BY &apos;password&apos;; @localhost 表示只允许本本机进行连接，如果需要外网(ip)连接，一般使用 % 替换。 2.授权1GRANT ALL PRIVILEGES ON * . * TO &apos;newuser&apos;@&apos;localhost&apos;; 完成授权后，请务必重新加载所有权限。 1FLUSH PRIVILEGES; * . * 表示授予该用户所有数据库下的所有权限(root权限)，切忌在生产环境这样操作，非常危险。一般按业务給不同用户不同的权限。 给数据分析用户只读从库的权限： 1GRANT SELECT ON database_name . table_name TO &apos;data&apos;@&apos;localhost&apos;; 给程序授权某张表的全部权限： 1GRANT ALL PRIVILEGES ON database_name . table_name TO &apos;username&apos;@&apos;localhost&apos;; MySQL配置123456789[client]default-character-set=utf8mb4[mysql]default-character-set=utf8mb4[mysqld]character-set-server = utf8mb4collation-server = utf8mb4_general_ci 这里直接使用 utf8mb4 而不要使用 utf8 ,实际应用中 utf8 编码无法存储一些特殊字符，比如 emoji 表情，昵称、评论、帖子等都有可能受到影响。(最初的 UTF-8 格式使用一至六个字节，最大能编码 31 位字符。最新的 UTF-8 规范(utf8mb4)只使用一到四个字节，最大能编码21位，正好能够表示所有的 17个 Unicode 平面)。 新建mysql库或者表的时候还有一个排序规则。utf8_unicode_ci 比较准确，utf8_general_ci 速度比较快。通常情况下 utf8_general_ci 的准确性就够我们用的了，在我看过很多程序源码后，发现它们大多数也用的是 utf8_general_ci，所以新建数据 库时一般选用utf8_general_ci 就可以了。 参考资料: How To Create a New User and Grant Permissions in MySQL]]></content>
       <categories>
         <category>docker</category>
@@ -16,34 +16,32 @@
   </entry>
   <entry>
     <title><![CDATA[理解阿里云mysql设计规范]]></title>
-    <url>%2F2018%2F10%2F06%2F%E7%90%86%E8%A7%A3%E9%98%BF%E9%87%8C%E4%BA%91mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83%2F</url>
+    <url>%2F%E7%90%86%E8%A7%A3%E9%98%BF%E9%87%8C%E4%BA%91mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83.html</url>
     <content type="text"><![CDATA[MySql作为一般公司最常用的关系型数据库，需要按照一定的规范来进行设计和运用，才能优雅的进行后续的开发。本文通过对阿里云mysql设计规范进行理解，来详细阐述各个规范的相关场景。 建表规约 【强制】表达是与否概念的字段，必须使用 is_xxx 的方式命名，数据类型是 unsigned tinyint（1 表示是，0 表示否）。 说明：任何字段如果为非负数，必须是 unsigned。 注意：POJO 类中的任何布尔类型的变量，都不要加 is 前缀，所以，需要在设置从 is_xxx 到 Xxx 的映射关系。数据库表示是与否的值，使用 tinyint 类型，坚持 is_xxx 的命名方式是为了明确其取值含义与取值范围。 正例：表达逻辑删除的字段名 is_deleted，1 表示删除，0 表示未删除。]]></content>
       <categories>
         <category>运维</category>
       </categories>
       <tags>
-        <tag>数据库</tag>
         <tag>mysql</tag>
+        <tag>数据库</tag>
         <tag>表设计规范</tag>
         <tag>阿里云规范</tag>
       </tags>
   </entry>
   <entry>
     <title><![CDATA[Java引用类型-强引用、软引用、弱引用、虚引用]]></title>
-    <url>%2F2018%2F09%2F17%2Fjava_reference%2F</url>
+    <url>%2Fjava_reference.html</url>
     <content type="text"><![CDATA[Java中，我们不需要手动管理对象的生命周期，但是如果希望对象具备一定的生命周期的话，就必须合理运用Java中的不同引用类型。从Java SE2起，就为提供了四种引用类型：强引用、软引用、弱引用和虚引用。本文通过分析他们在JDK中的使用场景来阐述不同引用类型在实际中的作用。 Java中提供这四种引用类型主要有两个目的：第一是可以让程序员通过代码的方式决定某些对象的生命周期；第二是有利于JVM进行垃圾回收。 强引用(StrongReference)概念&amp;用法强引用就是指在程序代码之中普遍存在的对象，使用 new 创建。 1Object obj = new Object(); 特性 只要某个对象有强引用与之关联，JVM必定不会回收这个对象，即使在内存不足的情况下，JVM宁愿抛出 OutOfMemoryError 错误也不会回收这种对象。 如果想强行中断强引用和某个对象的关联，可以显示的将引用赋值为null，这样Jvm会在合适的时间回收该对象。 应用 JDK中的应用 ArrayList 中删掉一个元素后，整体向前移动，最后一个位置需要置空回收。 1234567891011121314public E remove(int index) &#123; rangeCheck(index); modCount++; E oldValue = elementData(index); int numMoved = size - index - 1; if (numMoved &gt; 0) System.arraycopy(elementData, index+1, elementData, index, numMoved); elementData[--size] = null; // clear to let GC do its work return oldValue;&#125; 软引用(SoftReference)概念&amp;&amp;用法用来描述一些还有用但是并非必须的对象，在Java中用java.lang.ref.SoftReference类来表示。 123Object obj = new Object();SoftReference&lt;Object&gt; sf = new SoftReference&lt;Object&gt;(obj);obj = null; // 使对象只被软引用关联 特性 对于软引用关联着的对象，只有在内存不足的时候JVM才会回收该对象。这一点可以很好地用来解决OOM的问题，并且这个特性很适合用来实现缓存：比如网页缓存、图片缓存等。 内存不足时等价于: 1234if(内存不足)&#123; obj = null ; System.gc();&#125; 可以通过 -XX:SoftRefLRUPolicyMSPerMB 参数控制回收的时机。 应用 浏览器网页缓存实例 12345Browser bs= new Browser();Optional&lt;SoftReference&gt; sf = Optional.of(new SoftReference(bs));// 没被回收直接获取// 已被回收 重新创建sf.orElse(new SoftReference(new Broswer())); JDK中的应用 Java Class里面 reflectionData 方法获取反射数据的缓存，如果 (rd = reflectionData.get()) != null 说明有缓存，直接返回，否则重新创建。 1234567891011121314private ReflectionData&lt;T&gt; reflectionData() &#123; SoftReference&lt;ReflectionData&lt;T&gt;&gt; reflectionData = this.reflectionData; int classRedefinedCount = this.classRedefinedCount; ReflectionData&lt;T&gt; rd; if (useCaches &amp;&amp; reflectionData != null &amp;&amp; (rd = reflectionData.get()) != null &amp;&amp; rd.redefinedCount == classRedefinedCount) &#123; return rd; &#125; // else no SoftReference or cleared SoftReference or stale ReflectionData // -&gt; create and replace new instance return newReflectionData(reflectionData, classRedefinedCount);&#125; 与引用队列联合使用 软引用可以和一个引用队列（ReferenceQueue）联合使用，如果软引用所引用的对象被垃圾回收器回收，Java虚拟机就会把这个软引用加入到与之关联的引用队列中。 弱引用(WeakReference)概念&amp;&amp;用法弱引用与软引用的区别在于：只具有弱引用的对象拥有更短暂的生命周期。 123Object obj = new Object();WeakReference&lt;Object&gt; wf = new WeakReference&lt;Object&gt;(obj);obj = null; 下面代码会让 obj 变成强引用。 1Object newObject = wf.get(); 特性在垃圾回收器线程扫描它所管辖的内存区域的过程中，一旦发现了只具有弱引用的对象，不管当前内存空间足够与否，都会回收它的内存。不过，由于垃圾回收器是一个优先级很低的线程，因此不一定会很快发现那些只具有弱引用的对象。 应用如果这个对象是偶尔的使用，并且希望在使用时随时就能获取到，但又不想影响此对象的垃圾收集，那么你应该用 Weak Reference 来记住此对象。 图像缓存 假设我们要构建一个缓存，将大图像对象保存为值，将图像名称保存为键。我们想选择一个合适的Map实现来解决这个问题。 使用简单的HashMap不是一个好的选择，因为值对象可能占用大量内存。更重要的是，即使它们不再在我们的应用程序中使用，它们也永远不会通过GC进程从缓存中回收。 理想情况下，我们需要一个允许GC自动删除未使用对象的Map实现。当我们的应用程序中的任何地方没有使用大图像对象的键时，该对象将从内存中删除。 1234567891011WeakHashMap&lt;UniqueImageName, BigImage&gt; map = new WeakHashMap&lt;&gt;();BigImage bigImage = new BigImage("image_id");UniqueImageName imageName = new UniqueImageName("name_of_big_image"); map.put(imageName, bigImage);assertTrue(map.containsKey(imageName)); imageName = null;System.gc(); await().atMost(10, TimeUnit.SECONDS).until(map::isEmpty); JDK中的应用 WeakHashMap 中的 Entry 继承了 WeakReference ，能自动清除未被使用的对象。其构造函数如下： 12345678Entry(Object key, V value, ReferenceQueue&lt;Object&gt; queue, int hash, Entry&lt;K,V&gt; next) &#123; super(key, queue);// 调用构造函数，key为弱引用 this.value = value; this.hash = hash; this.next = next;&#125; ThreadLocal 中 ThreadLocalMap 里的 Entry 同样也是继承了 WeakReference 。 123456789static class Entry extends WeakReference&lt;ThreadLocal&lt;?&gt;&gt; &#123; /** The value associated with this ThreadLocal. */ Object value; Entry(ThreadLocal&lt;?&gt; k, Object v) &#123; super(k); // 调用构造函数，k为弱引用 value = v; &#125;&#125; 二者的共同点都是key为弱引用，当其只有弱引用时，GC一定会对其进行回收，释放内存。 虚引用(PhantomReference)概念&amp;&amp;用法“虚引用”顾名思义，就是形同虚设，与其他几种引用都不同，虚引用并不会决定对象的生命周期。 123Object obj = new Object();PhantomReference&lt;Object&gt; pf = new PhantomReference&lt;Object&gt;(obj);obj = null; 特性一个对象是否有虚引用的存在，完全不会对其生存时间构成影响，也无法通过虚引用取得一个对象。如果一个对象仅持有虚引用，那么它就和没有任何引用一样，在任何时候都可能被垃圾回收器回收，它的 get() 方法永远返回 null 。 应用虚引用主要用来跟踪对象被垃圾回收器回收的活动。虚引用与软引用和弱引用的一个区别在于：虚引用必须和引用队列 （ReferenceQueue）联合使用。当垃圾回收器准备回收一个对象时，如果发现它还有虚引用，就会在回收对象的内存之前，把这个虚引用加入到与之关联的引用队列中。PhantomReference 唯一的用处就是跟踪 referent 何时被 enqueue 到 ReferenceQueue 中。 虚引用使用场景 1、它允许你知道具体何时其引用的对象从内存中移除。而实际上这是Java中唯一的方式。这一点尤其表现在处理类似图片的大文件的情况。当你确定一个图片数据对象应该被回收，你可以利用虚引用来判断这个对象回收之后在继续加载下一张图片。这样可以尽可能地避免可怕的内存溢出错误。 2、虚引用可以避免很多析构时的问题。finalize 方法可以通过创建强引用指向快被销毁的对象来让这些对象重新复活。然而，一个重写了 finalize 方法的对象如果想要被回收掉，需要经历两个单独的垃圾收集周期。在第一个周期中，某个对象被标记为可回收，进而才能进行析构。 但是因为在析构过程中仍有微弱的可能这个对象会重新复活。这种情况下，在这个对象真实销毁之前，垃圾回收器需要再次运行。因为析构可能并不是很及时，所以在调用对象的析构之前，需要经历数量不确定的垃圾收集周期。这就意味着在真正清理掉这个对象的时候可能发生很大的延迟。这就是为什么当大部分堆被标记成垃圾时还是会出现烦人的内存溢出错误。 总结从 java 1.2 版本引入 java.lang.ref 包，共 4 种引用，这 4 种引用的级别高低依次为： 1强引用 &gt; 软引用 &gt; 弱引用 &gt; 虚引用 引用级别 GC 生存时间 强引用 从不 对象的一般状态，JVM停止运行时终止 软引用 内存不足时 JVM内存不足时 弱引用 垃圾回收时(只具有弱引用的对象) 下一次垃圾回收发生之前 虚引用 - - 参考链接 : Java中的强引用，软引用，弱引用，虚引用有什么用？ Guide to WeakHashMap in Java]]></content>
       <categories>
-        <category>Java</category>
+        <category>Java引用类型</category>
       </categories>
       <tags>
-        <tag>Java Reference</tag>
-        <tag>垃圾回收</tag>
-        <tag>Java引用类型</tag>
+        <tag>JAVA</tag>
       </tags>
   </entry>
   <entry>
     <title><![CDATA[改善接口(Api)设计 - Java 8 默认方法（Default Method）]]></title>
-    <url>%2F2018%2F09%2F07%2Fjava8_default_method%2F</url>
+    <url>%2Fjava8_default_method.html</url>
     <content type="text"><![CDATA[简介：本文通过分析对JDK中对默认方法 (default method) 的应用，浅析默认方法的作用，以及对我们接口设计的一些启发。 Default methods enable new functionality to be added to the interfaces of libraries and ensure binary compatibility with code written for older versions of those interfaces. 默认方法允许您添加新的功能到现有库的接口中，并能确保与采用旧版本接口编写的代码的二进制兼容性。 什么是默认方法 接口本身只能进行方法的定义，默认方法就是接口方法的“默认实现”。接口方法前加上关键字default即可。 为什么要有默认方法在 Java 8 之前，接口与其实现类之间的耦合度太高（tightly coupled），当需要为一个接口添加方法时，所有的实现类都必须随之修改。默认方法解决了这个问题，它可以为接口添加新的方法，而不会破坏已有的接口的实现。这在 lambda 表达式作为 Java 8 语言的重要特性而出现之际，为升级旧接口且保持向后兼容（backward compatibility）提供了途径。同时，默认方法的加入，也能改变传统Java接口的设计思想(Java 被人诟病的 Interface -&gt; Abstract -&gt; Class 模式)，简化接口设计。 Java 8中 Iterable 接口中的 forEach 方法: 123456789default void forEach(Consumer&lt;? super T&gt; var1) &#123; Objects.requireNonNull(var1); Iterator var2 = this.iterator(); while(var2.hasNext()) &#123; Object var3 = var2.next(); var1.accept(var3); &#125; &#125; Java传统接口设计模式Java 8之前，接口只能作为声明但不能提供任何实现。因此，为了添加一些实现，我们都需要一个 Abstract 类，如下图： 接口层定义相关方法 Abstract 类实现公共方法 如果子类需要自己需要自己的行为则直接重写(Override)即可。 问题产生在大部分的情况下，这种设计都是没有问题的，但是还是比较繁琐，下面是 Java Collections API List部分的继承关系： 我们以 List 接口中的 sort() 方法来分析。只有类，即 AbstractList 和 MyList 才能实际实现此方法，而具体实现是完全一致的，这就需要我们复制代码了。有人说，为什么不直接继承 AbstractList ，我们都知道Java中是不允许多继承的，有些情况会让你不得不这么做。 其次，如果我们给需要给 List 添加一个新的方法，那么就不得不对所有 List 的 实现类都添加此方法的实现，这是最糟糕的操作了。 Java API的设计者非常清楚这个问题，因此将 sort() 方法移到了一个只有静态方法的无关类中，没错，就是 Collections ，这样虽然解决了问题，但是却偏离的Java面向对象的思想。 Java 7中 Collections.sort(List&lt;T&gt; list) 方法实现如下： 123456789public static &lt;T extends Comparable&lt;? super T&gt;&gt; void sort(List&lt;T&gt; list) &#123; Object[] a = list.toArray(); Arrays.sort(a); ListIterator&lt;T&gt; i = list.listIterator(); for (int j=0; j&lt;a.length; j++) &#123; i.next(); i.set((T)a[j]); &#125; &#125; Default Method 改善Java8 引入Default Method后，很大程度上可以减少 Abstract 类的依赖，也能更好的实现“面向对象”，毕竟排序应当属于 List 本身的行为。 Java 8中 Collections 将 sort() 方法还给 List。Collections.sort(List&lt;T&gt; list) 方法实现如下： 123public static &lt;T extends Comparable&lt;? super T&gt;&gt; void sort(List&lt;T&gt; list) &#123; list.sort(null);&#125; List 接口中的 sort() 方法如下： 123456789default void sort(Comparator&lt;? super E&gt; c) &#123; Object[] a = this.toArray(); Arrays.sort(a, (Comparator) c); ListIterator&lt;E&gt; i = this.listIterator(); for (Object e : a) &#123; i.next(); i.set((E) e); &#125;&#125; 同时 default method 的引入给接口的扩展带来了极大的便利，我们可以随意扩展新的方法而不必过于考虑以前的实现。 参考资料: Default methods in Java 8, and what it changes in API design Java 8 默认方法（Default Methods）]]></content>
       <categories>
         <category>Java</category>
@@ -57,20 +55,20 @@
   </entry>
   <entry>
     <title><![CDATA[Redis迁移之主从同步]]></title>
-    <url>%2F2018%2F09%2F06%2F%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%81%E7%A7%BB%2F</url>
+    <url>%2F%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%81%E7%A7%BB.html</url>
     <content type="text"><![CDATA[Redis服务器迁移有多种方案，主从同步是一种比较安全的方案。具体思想是先给主库挂载一个从库，同步完成后切换到从库即可。 策略：主从同步老服务器 old 新服务器 new Ⅰ 修改相关配置 redis版本大于2.6 在服务器(new)上启动一个redis实例,由于redis2.6以后，redis的slave默认变得不再接受写操作，因此我们需要修改相关配置，有以下两种方式： 1.直接修改配置(推荐)，同步后再改为yes，避免引起其他问题 12127.0.0.1:6379&gt; CONFIG SET slave-read-only noOK 2.修改conf文件，如果不知道conf文件在哪儿可以使用info命令查询 12#slave-read-only yesslave-read-only no 主库有密码 从库需要设置master密码，可以直接更改conf文件，或者直接使用命令 1.直接修改配置(推荐) 12127.0.0.1:6379&gt; CONFIG SET masterauth authOK 2.修改conf文件 1masterauth auth Ⅱ 将新的redis 服务成为slave12127.0.0.1:6379&gt; SLAVEOF 192.168.1.102 6379OK 使用info命令可以查看redis状态 Ⅲ 完成迁移查看日志，待出现success时，说明已完成当前同步，如下： 1236600:S 06 Sep 16:49:40.984 * MASTER &lt;-&gt; SLAVE sync: Loading DB in memory36600:S 06 Sep 16:49:40.985 * MASTER &lt;-&gt; SLAVE sync: Finished with success 设新服务器为master 1SLAVEOF no one 如果使用命令修改了配置，建议改回 12345127.0.0.1:6379&gt; CONFIG SET slave-read-only yesOK127.0.0.1:6379&gt; CONFIG SET masterauth ‘’OK]]></content>
       <categories>
         <category>运维</category>
       </categories>
       <tags>
-        <tag>Redis</tag>
         <tag>数据库</tag>
+        <tag>Redis</tag>
         <tag>主从同步</tag>
       </tags>
   </entry>
   <entry>
     <title><![CDATA[基于docker的ELK分布式日志系统搭建]]></title>
-    <url>%2F2018%2F09%2F06%2Felk%2F</url>
+    <url>%2Felk.html</url>
     <content type="text"><![CDATA[简介ELK (ElasticSearch, Logstash, Kibana) 架构概述 ElasticSearch Elasticsearch 是一个分布式、可扩展、实时的搜索与数据分析的开源搜索引擎。此处我们不深究其强大的功能，仅仅用来检索日志。 Logstash Logstash 是开源的服务器端数据处理管道，能够同时从多个来源采集数据，转换数据，然后将数据发送到您最喜欢的 “存储库” 中。 Kinaba Kibana 是一款开源的数据分析和可视化平台，它是 Elastic Stack 成员之一，设计用于和 Elasticsearch 协作。您可以使用 Kibana 对 Elasticsearch 索引中的数据进行搜索、查看、交互操作。您可以很方便的利用图表、表格及地图对数据进行多元化的分析和呈现。 Kibana 可以使大数据通俗易懂。它很简单，基于浏览器的界面便于您快速创建和分享动态数据仪表板来追踪 Elasticsearch 的实时数据变化。 安装ELK此处使用ELK合并的elk-docker 从远程提取镜像1sudo docker pull sebp/elk 默认提取最新镜像,如果要使用其他版本，使用如下命令： 1sudo docker pull sebp/elk:E1L1K4 此命令(E1L1K4)表示使用 Elasticsearch 1.x ， Logstash 1.x ，Kibana 4.x 。 运行容器1sudo docker run -p 5601:5601 -p 9200:9200 -p 5044:5044 -it --name elk sebp/elk 此命令将暴露以下端口，分别是三个程序所需要的： 5061 (Kibana Web 端口). 9200 (Elasticsearch JSON 端口). 5044 (Logstash Beats 端口, Logstash 接受日志的端口，如来自filebeats的日志). 附： docker run -p xxx:yyy 表示将容器yyy端口映射到主机xxx端口 容器运行起来后 访问http://your-host:5601，如果能看的Kinaba管理页面，证明安装成功 配置]]></content>
       <categories>
         <category>运维</category>
@@ -85,7 +83,7 @@
   </entry>
   <entry>
     <title><![CDATA[Executors 源码解析]]></title>
-    <url>%2F2018%2F09%2F03%2FExecutors%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%2F</url>
+    <url>%2FExecutors%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90.html</url>
     <content type="text"><![CDATA[Executors 源码解析…. newFixedThreadPool 定义 123456789101112/** * ...... * @param nThreads the number of threads in the pool * @return the newly created thread pool * @throws IllegalArgumentException if &#123;@code nThreads &lt;= 0&#125; */public static ExecutorService newFixedThreadPool(int nThreads) &#123; return new ThreadPoolExecutor(nThreads, nThreads, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue&lt;Runnable&gt;());&#125; 创建可容纳固定数量(nThreads)线程的线程池； 每个线程的存活时间不限(0L),当线程池满后不在添加新的线程; 如果线程池中所有线程都处于繁忙状态，新的任务将会进入阻塞队列(LinkedBlockingQueue); newSingleThreadExecutor12345678910/** *...... * @return the newly created single-threaded Executor */public static ExecutorService newSingleThreadExecutor() &#123; return new FinalizableDelegatedExecutorService (new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue&lt;Runnable&gt;())); 创建一个只有一个线程的线程池; 每个线程存活时间不限(0L); 如果该线程处于繁忙状态，新的任务将会进入阻塞队列(LinkedBlockingQueue); 适用场景：一个任务一个任务执行的场景 newCachedThreadPool1234567891011/** * ...... * @return the newly created thread pool */public static ExecutorService newCachedThreadPool() &#123; return new ThreadPoolExecutor(0, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS, new SynchronousQueue&lt;Runnable&gt;());&#125; ScheduledThreadPoolExecutor12345678910111213/** * Creates a new &#123;@code ScheduledThreadPoolExecutor&#125; with the * given core pool size. * * @param corePoolSize the number of threads to keep in the pool, even * if they are idle, unless &#123;@code allowCoreThreadTimeOut&#125; is set * @throws IllegalArgumentException if &#123;@code corePoolSize &lt; 0&#125; */public ScheduledThreadPoolExecutor(int corePoolSize) &#123; super(corePoolSize, Integer.MAX_VALUE, 0, NANOSECONDS, new DelayedWorkQueue());&#125;]]></content>
       <categories>
         <category>Java</category>
@@ -100,7 +98,7 @@
   </entry>
   <entry>
     <title><![CDATA[Spring中的设计模式 - Design Pattern In Spring]]></title>
-    <url>%2F2018%2F08%2F23%2FSpring%E4%B8%AD%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-Design%20Pattern%20In%20Spring%2F</url>
+    <url>%2FSpring%E4%B8%AD%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-Design%20Pattern%20In%20Spring.html</url>
     <content type="text"><![CDATA[简介：本文将介绍几种常用的设计模式，并分析其在Spring中的应用及作用。 这是概要 参考资料: Default methods in Java 8, and what it changes in API design Java 8 默认方法（Default Methods）]]></content>
       <categories>
         <category>Spring中的设计模式</category>
@@ -114,7 +112,7 @@
   </entry>
   <entry>
     <title><![CDATA[将Linux应用程序注册为服务]]></title>
-    <url>%2F2018%2F08%2F06%2FLinux%E6%B3%A8%E5%86%8C%E6%9C%8D%E5%8A%A1%2F</url>
+    <url>%2FLinux%E6%B3%A8%E5%86%8C%E6%9C%8D%E5%8A%A1.html</url>
     <content type="text"><![CDATA[日常运维中，难免会出现程序崩溃，服务器卡死等情况。如果没有良好的自动处理系统，恢复起来将非常困难，如果是线上环境很可能造成极大的损失。本文将简单介绍使用Linux 服务来管理程序。 简介 创建 1cd /etc/systemd/system 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152[Unit]# 对当前服务的描述Description=ebook_task# 启动顺序，在network.target启动之后启动# After=network.target# 启动顺序，在network.target启动之前启动 # Before =network.target[Service]# 工作的根本目录WorkingDirectory=/root/deploy/ebook/ebook_task# 服务执行的命令ExecStart=/usr/bin/java -jar /root/deploy/ebook/ebook_task/ebook_task.jar --spring.profiles.active=dev# ExecReload：指定单元停止时执行的命令或者脚本。# ExecStop：指定单元停止时执行的命令或者脚本。# 重启策略# on-failure 程序意外退出(exit status is not 0)Restart=always# 重启时间 默认 100msRestartSec=5# SyslogIdentifier=ebook_task# 服务用户User=rootStandardOutput=null#Environment=ASPNETCORE_ENVIRONMENT=Production#Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false# simple（默认值）：systemd认为该服务将立即启动。服务进程不会fork。如果该服务要启动其他服务，不要使用此类型启动，除非该服务是socket激活型。# forking：systemd认为当该服务进程fork，且父进程退出后服务启动成功。对于常规的守护进程（daemon），除非你确定此启动方式无法满足需求，使用此类型启动即可。使用此启动类型应同时指定 PIDFile=，以便systemd能够跟踪服务的主进程。# oneshot：这一选项适用于只执行一项任务、随后立即退出的服务。可能需要同时设置 RemainAfterExit=yes 使得 systemd 在服务进程退出之后仍然认为服务处于激活状态。# notify：与 Type=simple 相同，但约定服务会在就绪后向 systemd 发送一个信号。这一通知的实现由 libsystemd-daemon.so 提供。# dbus：若以此方式启动，当指定的 BusName 出现在DBus系统总线上时，systemd认为服务就绪。# idle: systemd会等待所有任务(Jobs)处理完成后，才开始执行idle类型的单元。除此之外，其他行为和Type=simple 类似。# Type=simple[Install]WantedBy=multi-user.target]]></content>
       <categories>
         <category>运维</category>
@@ -126,7 +124,7 @@
   </entry>
   <entry>
     <title><![CDATA[HTTPS 原理解析]]></title>
-    <url>%2F2016%2F07%2F13%2FHTTPS%20%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90%2F</url>
+    <url>%2FHTTPS%20%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90.html</url>
     <content type="text"><![CDATA[HTTPS（全称：Hyper Text Transfer Protocol over Secure Socket Layer），是以安全为目标的HTTP通道，简单讲是HTTP的安全版。 一 前言在说HTTPS之前先说说什么是HTTP，HTTP就是我们平时浏览网页时候使用的一种协议。HTTP协议传输的数据都是未加密的，也就是明文的，因此使用HTTP协议传输隐私信息非常不安全。为了保证这些隐私数据能加密传输，于是网景公司设计了SSL（Secure Sockets Layer）协议用于对HTTP协议传输的数据进行加密，从而就诞生了HTTPS。SSL目前的版本是3.0，被IETF（Internet Engineering Task Force）定义在RFC 6101中，之后IETF对SSL 3.0进行了升级，于是出现了TLS（Transport Layer Security） 1.0，定义在RFC 2246。实际上我们现在的HTTPS都是用的TLS协议，但是由于SSL出现的时间比较早，并且依旧被现在浏览器 所支持，因此SSL依然是HTTPS的代名词，但无论是TLS还是SSL都是上个世纪的事情，SSL最后一个版本是3.0，今后TLS将会继承 SSL优良血统继续为我们进行加密服务。目前TLS的版本是1.2，定义在RFC 5246中，暂时还没有被广泛的使用 () 二 HTTPS 验证原理Https在真正请求数据前，先会与服务有几次握手验证，以证明相互的身份，以下图为例]]></content>
       <categories>
         <category>网络</category>
