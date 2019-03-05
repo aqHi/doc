@@ -109,14 +109,14 @@
 
 
   <meta name="description" content="简介：本文将介绍几种常用的设计模式，并分析其在Spring中的应用及作用。">
-<meta name="keywords" content="设计模式,Spring,Design Pattern">
+<meta name="keywords" content="设计模式,Design Pattern In Spring">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spring中的设计模式 - Design Pattern In Spring">
 <meta property="og:url" content="https://aqhi.net/Spring中的设计模式-Design Pattern In Spring.html">
 <meta property="og:site_name" content="aqHi&#39;blog">
 <meta property="og:description" content="简介：本文将介绍几种常用的设计模式，并分析其在Spring中的应用及作用。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-03-05T07:06:09.159Z">
+<meta property="og:updated_time" content="2019-03-05T09:25:31.385Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring中的设计模式 - Design Pattern In Spring">
 <meta name="twitter:description" content="简介：本文将介绍几种常用的设计模式，并分析其在Spring中的应用及作用。">
@@ -399,7 +399,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-03-05 15:06:09" itemprop="dateModified" datetime="2019-03-05T15:06:09+08:00">2019-03-05</time>
+                <time title="修改时间：2019-03-05 17:25:31" itemprop="dateModified" datetime="2019-03-05T17:25:31+08:00">2019-03-05</time>
               
             
           </span>
@@ -416,14 +416,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Spring中的设计模式/" itemprop="url" rel="index"><span itemprop="name">Spring中的设计模式</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Spring中的设计模式/Design-Pattern-In-Spring/" itemprop="url" rel="index"><span itemprop="name">Design Pattern In Spring</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/设计模式/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a></span>
 
                 
                 
@@ -517,7 +510,7 @@
 <h5 id="静态内部类实现-饿汉式改进-线程安全-thread-safe"><a href="#静态内部类实现-饿汉式改进-线程安全-thread-safe" class="headerlink" title="静态内部类实现(饿汉式改进) - 线程安全(thread-safe)"></a>静态内部类实现(饿汉式改进) - 线程安全(thread-safe)</h5><p>使用静态内部类封装，当 <code>Singleton</code> 类加载时，静态内部类 SingletonHolder 没有被加载进内存。只有当调用 <code>getInstance</code> 方法时才会被加载一次，延迟加载同时也是线程安全的。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonHolder</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Singleton INSTANCE = <span class="keyword">new</span> Singleton();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> SingletonHolder.INSTANCE;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="Spring-中的应用"><a href="#Spring-中的应用" class="headerlink" title="Spring 中的应用"></a>Spring 中的应用</h4><p>我们都知道Spring中Bean都是 <em>‘单例’(Singleton Scope)</em>的，实际上这种<em>‘单例’</em>跟我们所使用的<em>单例模式(Singleton Pattern)</em>是不同的，Spring Ioc容器会根据bean的定义创建实例并使用id绑定，因此一个Bean的定义实际上是可以产生多个不同的bean的，<strong>Spring只保证每一个bean的id只有一个实例。而<em>单例模式</em>则是确保每一个类(ClassLoader)只有一个实例</strong>。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Nullable</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> Object <span class="title">getSingleton</span><span class="params">(String beanName, <span class="keyword">boolean</span> allowEarlyReference)</span> </span>&#123;</span><br><span class="line">	Object singletonObject = <span class="keyword">this</span>.singletonObjects.get(beanName);</span><br><span class="line">	<span class="comment">// 如果获取的备案</span></span><br><span class="line">	<span class="keyword">if</span> (singletonObject == <span class="keyword">null</span> &amp;&amp; isSingletonCurrentlyInCreation(beanName)) &#123;</span><br><span class="line">		<span class="keyword">synchronized</span> (<span class="keyword">this</span>.singletonObjects) &#123;</span><br><span class="line">			singletonObject = <span class="keyword">this</span>.earlySingletonObjects.get(beanName);</span><br><span class="line">			<span class="keyword">if</span> (singletonObject == <span class="keyword">null</span> &amp;&amp; allowEarlyReference) &#123;</span><br><span class="line">				ObjectFactory&lt;?&gt; singletonFactory = <span class="keyword">this</span>.singletonFactories.get(beanName);</span><br><span class="line">				<span class="keyword">if</span> (singletonFactory != <span class="keyword">null</span>) &#123;</span><br><span class="line">					singletonObject = singletonFactory.getObject();</span><br><span class="line">					<span class="keyword">this</span>.earlySingletonObjects.put(beanName, singletonObject);</span><br><span class="line">					<span class="keyword">this</span>.singletonFactories.remove(beanName);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> singletonObject;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Nullable</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> Object <span class="title">getSingleton</span><span class="params">(String beanName, <span class="keyword">boolean</span> allowEarlyReference)</span> </span>&#123;</span><br><span class="line">	Object singletonObject = <span class="keyword">this</span>.singletonObjects.get(beanName);</span><br><span class="line">	<span class="comment">// 如果当前实例为null 并且正在创建中，走同步代码</span></span><br><span class="line">	<span class="keyword">if</span> (singletonObject == <span class="keyword">null</span> &amp;&amp; isSingletonCurrentlyInCreation(beanName)) &#123;</span><br><span class="line">		<span class="keyword">synchronized</span> (<span class="keyword">this</span>.singletonObjects) &#123;</span><br><span class="line">			singletonObject = <span class="keyword">this</span>.earlySingletonObjects.get(beanName);</span><br><span class="line">			<span class="keyword">if</span> (singletonObject == <span class="keyword">null</span> &amp;&amp; allowEarlyReference) &#123;</span><br><span class="line">				ObjectFactory&lt;?&gt; singletonFactory = <span class="keyword">this</span>.singletonFactories.get(beanName);</span><br><span class="line">				<span class="keyword">if</span> (singletonFactory != <span class="keyword">null</span>) &#123;</span><br><span class="line">					singletonObject = singletonFactory.getObject();</span><br><span class="line">					<span class="keyword">this</span>.earlySingletonObjects.put(beanName, singletonObject);</span><br><span class="line">					<span class="keyword">this</span>.singletonFactories.remove(beanName);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> singletonObject;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>参考资料:</p>
 <ul>
 <li><a href="https://en.wikipedia.org/wiki/Singleton_pattern" target="_blank" rel="noopener">Singleton pattern</a></li>
@@ -704,9 +697,7 @@
                     
                       
                     
-                      
-                    
-                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-count">6</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
