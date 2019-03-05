@@ -43,7 +43,7 @@
   </entry>
   <entry>
     <title><![CDATA[Redis迁移之主从同步]]></title>
-    <url>%2F%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%81%E7%A7%BB.html</url>
+    <url>%2FRedis%E8%BF%81%E7%A7%BB%E4%B9%8B%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5.html</url>
     <content type="text"><![CDATA[Redis服务器迁移有多种方案，主从同步是一种比较安全的方案。具体思想是先给主库挂载一个从库，同步完成后切换到从库即可。 策略：主从同步老服务器 old 新服务器 new Ⅰ 修改相关配置 redis版本大于2.6 在服务器(new)上启动一个redis实例,由于redis2.6以后，redis的slave默认变得不再接受写操作，因此我们需要修改相关配置，有以下两种方式： 1.直接修改配置(推荐)，同步后再改为yes，避免引起其他问题 12127.0.0.1:6379&gt; CONFIG SET slave-read-only noOK 2.修改conf文件，如果不知道conf文件在哪儿可以使用info命令查询 12#slave-read-only yesslave-read-only no 主库有密码 从库需要设置master密码，可以直接更改conf文件，或者直接使用命令 1.直接修改配置(推荐) 12127.0.0.1:6379&gt; CONFIG SET masterauth authOK 2.修改conf文件 1masterauth auth Ⅱ 将新的redis 服务成为slave12127.0.0.1:6379&gt; SLAVEOF 192.168.1.102 6379OK 使用info命令可以查看redis状态 Ⅲ 完成迁移查看日志，待出现success时，说明已完成当前同步，如下： 1236600:S 06 Sep 16:49:40.984 * MASTER &lt;-&gt; SLAVE sync: Loading DB in memory36600:S 06 Sep 16:49:40.985 * MASTER &lt;-&gt; SLAVE sync: Finished with success 设新服务器为master 1SLAVEOF no one 如果使用命令修改了配置，建议改回 12345127.0.0.1:6379&gt; CONFIG SET slave-read-only yesOK127.0.0.1:6379&gt; CONFIG SET masterauth ‘’OK]]></content>
       <categories>
         <category>运维</category>
@@ -87,15 +87,13 @@
   <entry>
     <title><![CDATA[Spring中的设计模式 - Design Pattern In Spring]]></title>
     <url>%2FSpring%E4%B8%AD%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-Design%20Pattern%20In%20Spring.html</url>
-    <content type="text"><![CDATA[简介：本文将介绍几种常用的设计模式，并分析其在Spring中的应用及作用。 这是概要 参考资料: Default methods in Java 8, and what it changes in API design Java 8 默认方法（Default Methods）]]></content>
+    <content type="text"><![CDATA[简介：本文将介绍几种常用的设计模式，并分析其在Spring中的应用及作用。 这是概要 创建型单例模式(Singleton pattern)定义 单例模式，也叫单子模式，单例对象的类必须保证只有一个实例存在。 常用情况 抽象工厂模式、建造者模式、原型模式可以在其实现中使用单例。 外观模式（Facade pattern）对象通常是单例的，提供一个对外的接口。 参考资料: Default methods in Java 8, and what it changes in API design Java 8 默认方法（Default Methods）]]></content>
       <categories>
         <category>Spring中的设计模式</category>
         <category>Design Pattern In Spring</category>
       </categories>
       <tags>
         <tag>设计模式</tag>
-        <tag>Spring</tag>
-        <tag>Design Pattern</tag>
       </tags>
   </entry>
   <entry>
