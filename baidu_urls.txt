@@ -1,4 +1,7 @@
+https://aqhi.net/数据结构.html
+https://aqhi.net/JAVA面试题.html
 https://aqhi.net/docker mysql 安装配置及注意事项.html
+https://aqhi.net/ThreadLocal的原理与应用.html
 https://aqhi.net/理解阿里云mysql数据库设计规范.html
 https://aqhi.net/java_reference.html
 https://aqhi.net/java8_default_method.html

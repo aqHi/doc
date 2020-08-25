@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="aqHi&#39;blog">
 <meta property="og:description" content="Executors 源码解析….">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-09-11T06:26:05.764Z">
+<meta property="og:updated_time" content="2019-09-25T15:06:01.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Executors 源码解析">
 <meta name="twitter:description" content="Executors 源码解析….">
@@ -399,7 +399,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-09-11 14:26:05" itemprop="dateModified" datetime="2018-09-11T14:26:05+08:00">2018-09-11</time>
+                <time title="修改时间：2019-09-25 23:06:01" itemprop="dateModified" datetime="2019-09-25T23:06:01+08:00">2019-09-25</time>
               
             
           </span>
@@ -491,7 +491,20 @@
 </ul>
 <p>适用场景：一个任务一个任务执行的场景</p>
 <h4 id="newCachedThreadPool"><a href="#newCachedThreadPool" class="headerlink" title="newCachedThreadPool"></a>newCachedThreadPool</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * ......</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> the newly created thread pool</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newCachedThreadPool</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ThreadPoolExecutor(<span class="number">0</span>, Integer.MAX_VALUE,</span><br><span class="line">                                  <span class="number">60L</span>, TimeUnit.SECONDS,</span><br><span class="line">                                  <span class="keyword">new</span> SynchronousQueue&lt;Runnable&gt;());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>创建一个可缓存线程池</li>
+<li>如果线程池长度超过处理需要，可灵活回收空闲线程，若无可回收，则新建线程。</li>
+</ul>
 <h4 id="ScheduledThreadPoolExecutor"><a href="#ScheduledThreadPoolExecutor" class="headerlink" title="ScheduledThreadPoolExecutor"></a>ScheduledThreadPoolExecutor</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Creates a new &#123;<span class="doctag">@code</span> ScheduledThreadPoolExecutor&#125; with the</span></span><br><span class="line"><span class="comment"> * given core pool size.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> corePoolSize the number of threads to keep in the pool, even</span></span><br><span class="line"><span class="comment"> *        if they are idle, unless &#123;<span class="doctag">@code</span> allowCoreThreadTimeOut&#125; is set</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> IllegalArgumentException if &#123;<span class="doctag">@code</span> corePoolSize &lt; 0&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ScheduledThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>(corePoolSize, Integer.MAX_VALUE, <span class="number">0</span>, NANOSECONDS,</span><br><span class="line">          <span class="keyword">new</span> DelayedWorkQueue());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>创建一个定长线程池，支持定时及周期性任务执行。</li>
+</ul>
+<p>####</p>
+<p>当我们使用完成ExecutorService之后应该关闭它，否则它里面的线程会一直处于运行状态。</p>
+<p>举个例子，如果的应用程序是通过main()方法启动的，在这个main()退出之后，如果应用程序中的ExecutorService没有关闭，这个应用将一直运行。之所以会出现这种情况，是因为ExecutorService中运行的线程会阻止JVM关闭。</p>
+<p>如果要关闭ExecutorService中执行的线程，我们可以调用ExecutorService.shutdown()方法。在调用shutdown()方法之后，ExecutorService不会立即关闭，但是它不再接收新的任务，直到当前所有线程执行完成才会关闭，所有在shutdown()执行之前提交的任务都会被执行。</p>
+<p>如果我们想立即关闭ExecutorService，我们可以调用ExecutorService.shutdownNow()方法。这个动作将跳过所有正在执行的任务和被提交还没有执行的任务。但是它并不对正在执行的任务做任何保证，有可能它们都会停止，也有可能执行完成。</p>
+
       
     </div>
 
@@ -653,7 +666,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-count">13</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -678,7 +691,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">6</span>
+                      
+                    
+                    <span class="site-state-item-count">7</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -735,7 +750,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">22</span>
+                      
+                    
+                    <span class="site-state-item-count">23</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -835,7 +852,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2015 – <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; 2015 – <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
